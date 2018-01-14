@@ -1,12 +1,13 @@
 package generators;
 
+import java.util.Random;
+
 public class RandomUtils {
 
-	public static int randomGaussian(int max, int min, int steepness) {
-		int y = 0;
-	
-		y = Math.abs(y);
-		return y;
+	public static double randomGaussian(double mean, double  standardDeviation) {
+		Random randomer = new Random();
+		double val = randomer.nextGaussian()*standardDeviation+mean;
+		return val;
 	}
-	
+
 }

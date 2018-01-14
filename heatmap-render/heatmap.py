@@ -92,7 +92,6 @@ def drawmap(grid, name):
 			pygame.draw.rect(screen, colour, rectangle)
 	pygame.display.flip()
 
-	
 
 
 fname = "../JMapper/files/map.txt"
