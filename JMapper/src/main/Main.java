@@ -14,7 +14,7 @@ public class Main {
 		Maker maker = new Maker();
 		
 		grid = maker.randomGrid(grid, 0, 150);
-		
+		grid = maker.makeCircle(grid, 100, 100, 20, 255);
 		filer.saveMap("files/map.txt", grid);
 		
 	}
