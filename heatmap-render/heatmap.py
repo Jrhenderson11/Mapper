@@ -80,8 +80,8 @@ def drawmap(grid, name):
 	grad = gradient_func([(0, 0, 255), (0, 255, 255), (255, 255, 0), (255, 0, 0)])
 
 	 
-	#maximum = get_max(grid)
-	maximum = 255
+	maximum = get_max(grid)
+	#maximum = 800
 	for y in range(height):
 		for x in range(width):
 			#make rect
