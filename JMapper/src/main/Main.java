@@ -3,8 +3,8 @@ package main;
 import java.io.IOException;
 
 import filehandling.FileHandler;
-import generators.Basic;
-import generators.Mountains;
+import heightmaps.generators.Basic;
+import heightmaps.generators.Mountains;
 
 public class Main {
 
