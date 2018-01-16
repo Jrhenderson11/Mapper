@@ -14,7 +14,7 @@ public class Main {
 		//grid = {{1,2,3,4,5},{1,2,3,4,5},{1,2,3,4,5},{1,2,3,4,5},{1,2,3,4,5}};
 		Original map = new Original("normal");
 		map.make();
-		FileHandler.saveMap("files/map.txt", map.getGrid());
+		FileHandler.saveStringMap("files/map.txt", map.getGrid());
 		drawMap();
 	}
 	
