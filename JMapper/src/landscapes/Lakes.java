@@ -59,8 +59,8 @@ public class Lakes {
 		int numTrees = RandomUtils.randomInt(11, 5);
 
 		// Lake
-		grid = Tools.makeCircle(grid, y, x, RandomUtils.randomPosGaussian(15, 5), "=");
-		
+//		grid = Tools.makeCircle(grid, x, y, RandomUtils.randomPosGaussian(15, 5), "=");
+		grid = Tools.makeEllipse(grid, x, y, RandomUtils.randomPosGaussian(15, 7), RandomUtils.randomPosGaussian(15, 7), "=");
 		//Expand Pool
 
 		// Green Edges

@@ -25,16 +25,12 @@ public class Drawer extends Application {
 	private static Color GREY = Color.rgb(98, 102, 101);
 	private static Color LIGHT_BLUE = Color.rgb(114, 219, 219);
 	private static Color DARK_GREEN = Color.rgb(50, 86, 29);
-
-	private static HashMap<String, Color> COLOUR_TABLE = new HashMap<String, Color>();
-
-	private static String[][] grid;
-
-	private static int size = 200;
-
-	private static Original map;
 	
-	private static String type = "archipelago"; 
+	private static HashMap<String, Color> COLOUR_TABLE = new HashMap<String, Color>();
+	private static String[][] grid;
+	private static int size = 200;
+	private static Original map;
+	private static String type = "normal"; 
 	
 	public static void setGrid(String[][] newGrid) {
 		grid = newGrid;

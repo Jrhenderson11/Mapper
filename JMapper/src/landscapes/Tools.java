@@ -159,4 +159,32 @@ public class Tools {
 		return grid;
 	}
 
+	public static String[][] makeEllipse(String[][] grid, int posX, int posY, int xRadius, int yRadius, String fillval) {
+		int width = grid.length;
+		int height = grid[0].length;
+		int xysq = ((xRadius * xRadius) * (yRadius * yRadius));
+		for (int x = 0;  ((yRadius * yRadius)*(x * x)) <= xysq; x++) {
+			for (int y = 0; y < Math.sqrt((xysq - ((yRadius * yRadius)*(x * x)))/(xRadius*xRadius)); y++) {
+								
+				if (posY + y < (height - 1)) {
+					if (posX + x < (width - 1)) {
+						grid[posY + y][posX + x] = fillval;
+					}
+					if (posX - x > 0) {
+						grid[posY + y][posX - x] = fillval;
+					}
+				}
+				if (posY - y > 0) {
+					if (posX + x < (width - 1)) {
+						grid[posY - y][posX + x] = fillval;
+					}
+					if (posX - x > 0) {
+						grid[posY - y][posX - x] = fillval;
+					}
+				}
+			}
+		}
+
+		return grid;
+	}
 }
