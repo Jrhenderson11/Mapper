@@ -9,9 +9,9 @@ public class Tools {
 	public static int findNumEdges(String[][] grid, int x, int y, String tile) {
 		int width = grid.length;
 		int height = grid[0].length;
-		
+
 		int count = 0;
-		if (x < (width-1)) {
+		if (x < (width - 1)) {
 			if (grid[x + 1][y] == tile) {
 				count++;
 			}
@@ -21,17 +21,51 @@ public class Tools {
 				count++;
 			}
 		}
-		if (y < (height-1)) {
+		if (y < (height - 1)) {
 			if (grid[x][y + 1] == tile) {
 				count++;
 			}
 		}
 		if (y != 0) {
-			if (grid[x][y-1] == tile) {
+			if (grid[x][y - 1] == tile) {
 				count++;
 			}
 		}
 		return count;
+	}
+
+	public static int findNumEdges8(String[][] grid, int x, int y, String tile) {
+		int width = grid.length;
+		int height = grid[0].length;
+
+		int count = 0;
+
+		if (y < height - 1) {
+			if (x < width - 1) {
+				if (grid[x + 1][y + 1] == tile) {
+					count++;
+				}
+			}
+			if (x > 0) {
+				if (grid[x - 1][y + 1] == tile) {
+					count++;
+				}
+			}
+		}
+		if (y > 0) {
+			if (x < width - 1) {
+				if (grid[x + 1][y - 1] == tile) {
+					count++;
+				}
+			}
+			if (x > 0) {
+				if (grid[x - 1][y - 1] == tile) {
+					count++;
+				}
+			}
+		}
+
+		return count + findNumEdges(grid, x, y, tile);
 	}
 
 	public static String[][] randomMake(String[][] grid, int x, int y, int chance, String tile) {
@@ -45,8 +79,8 @@ public class Tools {
 	public static String[][] setBlock(String[][] grid, int posX, int posY, String tile, int rectWidth, int rectHeight) {
 		int width = grid.length;
 		int height = grid[0].length;
-		for (int y = posY; (y-posY<rectHeight) && (y<height); y++) {
-			for (int x = posX; (x-posX < rectWidth) && (x<width); x++) {
+		for (int y = posY; (y - posY < rectHeight) && (y < height); y++) {
+			for (int x = posX; (x - posX < rectWidth) && (x < width); x++) {
 				grid[x][y] = tile;
 			}
 		}
@@ -81,7 +115,7 @@ public class Tools {
 		for (int y = 0; y < grid.length; y++) {
 			for (int x = 0; x < grid[0].length; x++) {
 				int val = rand.nextInt(base + variation) + base;
-				//grid[y][x] = val;
+				// grid[y][x] = val;
 			}
 		}
 		return grid;

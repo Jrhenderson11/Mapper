@@ -7,12 +7,10 @@ GRASS = (125, 186, 81)
 BLUE  = (50, 127, 186)
 GREY  = (98, 102, 101)
 LIGHT_BLUE = (114, 219, 219)
+DARK_GREEN = (50, 86, 29)
 
 
-
-
-
-COLOUR_TABLE = {'^': PINK, '=':BLUE, 'w':LIGHT_BLUE, '-':SAND, '.':GRASS, 'x':GREY}
+COLOUR_TABLE = {'^': DARK_GREEN, '=':BLUE, 'w':LIGHT_BLUE, '-':SAND, '.':GRASS, 'x':GREY}
 
 
 def readmap(fname):

@@ -50,8 +50,6 @@ public class Lakes {
 		}
 		return grid;
 	}
-
-
 	
 	public static String[][] lake(String[][] grid, int x, int y) {
 		int width = grid.length;
@@ -60,8 +58,8 @@ public class Lakes {
 		int distance;
 		int numTrees = RandomUtils.randomInt(11, 5);
 
-		// Pool
-		grid = Tools.makeCircle(grid, y, x, RandomUtils.randomPosGaussian(6, 2), "=");
+		// Lake
+		grid = Tools.makeCircle(grid, y, x, RandomUtils.randomPosGaussian(15, 5), "=");
 		
 		//Expand Pool
 
@@ -106,7 +104,7 @@ public class Lakes {
 		int numTrees = RandomUtils.randomInt(11, 5);
 
 		// Pool
-		grid = Tools.makeCircle(grid, y, x, RandomUtils.randomPosGaussian(3, 1), "=");
+		grid = Tools.makeCircle(grid, y, x, RandomUtils.randomPosGaussian(5, 4), "=");
 		
 		//Expand Pool
 
@@ -147,7 +145,7 @@ public class Lakes {
 		int width = grid.length;
 		int height = grid[0].length;
 		if (x > 0 && x < width && y > 0 && y < height) {
-			switch (Tools.findNumEdges(grid,x, y, ".")) {
+			switch (Tools.findNumEdges8(grid,x, y, ".")/2) {
 			case 1:
 				grid = Tools.randomMake(grid, x, y, 30, ".");
 				break;
@@ -163,7 +161,6 @@ public class Lakes {
 		}
 		return grid;
 	}
-
 	
 	public static boolean palmTreeChance(int dist) {
 		boolean spawn = false;
@@ -209,9 +206,4 @@ public class Lakes {
 		}
 		return spawn;
 	}
-
-	
-	
-	
-	
 }

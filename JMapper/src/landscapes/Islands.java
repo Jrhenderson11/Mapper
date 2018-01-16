@@ -158,7 +158,7 @@ public class Islands {
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = 0; iX < width; iX++) {
 				numLand = 0;
-				numLand = Tools.findNumEdges(grid, iX, iY, ".");
+				numLand = Tools.findNumEdges8(grid, iX, iY, ".")/2;
 				if (grid[iX][iY] == "w" && numLand > 0) {
 					grid[iX][iY] = "-";
 				}
@@ -168,7 +168,7 @@ public class Islands {
 			for (int iY = 0; iY < height; iY++) {
 				for (int iX = 0; iX < width; iX++) {
 					numBeach = 0;
-					numBeach = Tools.findNumEdges(grid, iX, iY, "-");
+					numBeach = Tools.findNumEdges8(grid, iX, iY, "-")/2;
 					if (grid[iX][iY] == "w" && numBeach > 0) {
 						grid = Tools.randomMake(grid, iX, iY, 50, "PLACE");
 					}
