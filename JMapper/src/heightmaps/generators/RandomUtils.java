@@ -13,7 +13,7 @@ public class RandomUtils {
 	public static int randomPosGaussian(double mean, double  standardDeviation) {
 		Random randomer = new Random();
 		double val = randomer.nextGaussian()*standardDeviation+mean;
-		return Math.max((int) val, 0);
+		return (int) Math.abs(val);
 	}
 
 	public static int randomInt(int max, int min) {

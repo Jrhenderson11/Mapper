@@ -1,5 +1,7 @@
 package landscapes;
 
+import java.util.Random;
+
 import heightmaps.generators.RandomUtils;
 
 public class Tools {
@@ -61,6 +63,50 @@ public class Tools {
 				}
 			}
 		}
+		return grid;
+	}
+
+	public static String[][] fillGrid(String[][] grid, String fillval) {
+		for (int y = 0; y < grid.length; y++) {
+			for (int x = 0; x < grid[0].length; x++) {
+				grid[y][x] = fillval;
+			}
+		}
+		return grid;
+	}
+
+	public static String[][] randomGrid(String[][] grid, int base, int variation) {
+		Random rand = new Random();
+
+		for (int y = 0; y < grid.length; y++) {
+			for (int x = 0; x < grid[0].length; x++) {
+				int val = rand.nextInt(base + variation) + base;
+				//grid[y][x] = val;
+			}
+		}
+		return grid;
+	}
+
+	public static String[][] makeRectangle(String[][] grid, int posX, int posY, int width, int height, String fillval) {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				grid[posY - y][posX + x] = fillval;
+			}
+		}
+
+		return grid;
+	}
+
+	public static String[][] makeCircle(String[][] grid, int posX, int posY, int radius, String fillval) {
+		for (int x = 0; x < radius + 1; x++) {
+			for (int y = 0; y < Math.sqrt((radius * radius) - (x * x)) + 1; y++) {
+				grid[posY + y][posX + x] = fillval;
+				grid[posY + y][posX - x] = fillval;
+				grid[posY - y][posX + x] = fillval;
+				grid[posY - y][posX - x] = fillval;
+			}
+		}
+
 		return grid;
 	}
 

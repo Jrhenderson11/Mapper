@@ -24,12 +24,12 @@ public class Rivers {
 				x = rand.nextInt(width - 1);
 				y = rand.nextInt(height - 1);
 			}
-			grid = river(grid, x, y, 2);
+			grid = river(grid, x, y, 2, 1);
 		}
 		return grid;
 	}
 
-	public static String[][] river(String[][] grid, int posX, int posY, int strength) {
+	public static String[][] river(String[][] grid, int posX, int posY, int strength, int bendyness) {
 
 		int width = grid.length;
 		int height = grid[0].length;
@@ -67,7 +67,7 @@ public class Rivers {
 			grid[x][y] = "=";
 
 			nextDirection = pickDirection(strength, preferredDirection);
-
+			
 			while (riverCanGo(grid, nextDirection, x, y) == false) {
 				boolean passable = (riverCanGo(grid, Direction.UP, x, y) || (riverCanGo(grid, Direction.DOWN, x, y)) || (riverCanGo(grid, Direction.LEFT, x, y))
 						|| (riverCanGo(grid, Direction.RIGHT, x, y)));
@@ -105,6 +105,8 @@ public class Rivers {
 				stop = true;
 			}
 
+			
+			
 			// REACH SEA
 			if (!stop) {
 				try {
@@ -124,6 +126,26 @@ public class Rivers {
 			// "" "" River(X, Y)
 			// "" "" Chance = 100
 			// "" ""End If
+			
+			//bend
+			int percent = RandomUtils.randomInt(100, 1);
+			if (percent<=bendyness) {
+				switch (RandomUtils.randomInt(4, 1)) {
+				case 1:
+					preferredDirection = Direction.UP;
+					break;
+				case 2:
+					preferredDirection = Direction.DOWN;
+					break;
+				case 3:
+					preferredDirection = Direction.LEFT;
+					break;
+				default:
+					preferredDirection = Direction.RIGHT;
+					break;
+				}
+			}
+		
 		}
 		return grid;
 	}

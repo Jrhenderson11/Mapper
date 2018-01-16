@@ -28,47 +28,67 @@ public class Lakes {
 		return grid;
 	}
 
-	public static String[][] oasis(String[][] grid, int x, int y) {
+	public static String[][] makeLakes(String[][] grid, int minLakes, int maxLakes) {
+		int width = grid.length;
+		int height = grid[0].length;
+		
+		System.out.println("making oasises");
+		Random rand = new Random();
+		int numOases;
+		int x, y;
+
+		numOases = RandomUtils.randomInt(maxLakes, minLakes);
+
+		for (int i = 0; i <= numOases; i++) {
+			x = rand.nextInt(width - 1);
+			y = rand.nextInt(height - 1);
+			while ((grid[x][y] == "w") || (grid[x][y] == "x")) {
+				x = rand.nextInt(width - 1);
+				y = rand.nextInt(height - 1);
+			}
+			grid = lake(grid, x, y);
+		}
+		return grid;
+	}
+
+
+	
+	public static String[][] lake(String[][] grid, int x, int y) {
 		int width = grid.length;
 		int height = grid[0].length;
 		
 		int distance;
 		int numTrees = RandomUtils.randomInt(11, 5);
 
-		// Green Core
+		// Pool
+		grid = Tools.makeCircle(grid, y, x, RandomUtils.randomPosGaussian(6, 2), "=");
+		
+		//Expand Pool
+
+		// Green Edges
+		int numWater;
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = 0; iX < width; iX++) {
-				distance = (int) Math.round(Math.abs(Math.sqrt(((iX - x) * (iX - x)) + ((iY - y) * (iY - y)))));
-				if (distance < 5) {
+				numWater = Tools.findNumEdges(grid, iX, iY, "=");
+				if (grid[iX][iY] == "w" && numWater > 0) {
 					grid[iX][iY] = ".";
 				}
 			}
 		}
-
-		// Green Edges
-		for (int iY = 0; iY < height; iY++) {
-			for (int iX = 0; iX < width; iX++) {
-				grid = oasisEdge(grid, iX, iY);
-			}
-		}
-
-		// Pool
-		for (int iY = 0; iY < height; iY++) {
-			for (int iX = 0; iX < width; iX++) {
-				distance = (int) Math.round(Math.abs(Math.sqrt(((iX - x) * (iX - x)) + ((iY - y) * (iY - y)))));
-				if (distance < 3) {
-					grid[iX][iY] = "=";
+		for (int i=0; i< 3;i++) {
+			for (int iY = 0; iY < height; iY++) {
+				for (int iX = 0; iX < width; iX++) {
+					//grid = treeEdge(grid, iX, iY);
 				}
 			}
 		}
-
 		// Trees
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = 0; iX < width; iX++) {
 				distance = (int) Math.round(Math.abs(Math.sqrt(((iX - x) * (iX - x)) + ((iY - y) * (iY - y)))));
 				if (distance < 10 && distance > 5) {
 					if (palmTreeChance(distance)) {
-						grid[iX][iY] = ".";
+						grid[iX][iY] = "^";
 					}
 				}
 			}
@@ -78,6 +98,51 @@ public class Lakes {
 		return grid;
 	}
 
+	public static String[][] oasis(String[][] grid, int x, int y) {
+		int width = grid.length;
+		int height = grid[0].length;
+		
+		int distance;
+		int numTrees = RandomUtils.randomInt(11, 5);
+
+		// Pool
+		grid = Tools.makeCircle(grid, y, x, RandomUtils.randomPosGaussian(3, 1), "=");
+		
+		//Expand Pool
+
+		// Green Edges
+		int numWater;
+		for (int iY = 0; iY < height; iY++) {
+			for (int iX = 0; iX < width; iX++) {
+				numWater = Tools.findNumEdges(grid, iX, iY, "=");
+				if (grid[iX][iY] == "w" && numWater > 0) {
+					grid[iX][iY] = ".";
+				}
+			}
+		}
+		for (int i=0; i< 3;i++) {
+			for (int iY = 0; iY < height; iY++) {
+				for (int iX = 0; iX < width; iX++) {
+					grid = oasisEdge(grid, iX, iY);
+				}
+			}
+		}
+		// Trees
+		for (int iY = 0; iY < height; iY++) {
+			for (int iX = 0; iX < width; iX++) {
+				distance = (int) Math.round(Math.abs(Math.sqrt(((iX - x) * (iX - x)) + ((iY - y) * (iY - y)))));
+				if (distance < 10 && distance > 5) {
+					if (palmTreeChance(distance)) {
+						grid[iX][iY] = "^";
+					}
+				}
+			}
+		}
+
+		// block chance method
+		return grid;
+	}
+	
 	public static String[][] oasisEdge(String[][] grid, int x, int y) {
 		int width = grid.length;
 		int height = grid[0].length;
@@ -87,10 +152,10 @@ public class Lakes {
 				grid = Tools.randomMake(grid, x, y, 30, ".");
 				break;
 			case 2:
-				grid = Tools.randomMake(grid, x, y, 30, ".");
+				grid = Tools.randomMake(grid, x, y, 60, ".");
 				break;
 			case 3:
-				grid = Tools.randomMake(grid, x, y, 50, ".");
+				grid = Tools.randomMake(grid, x, y, 60, ".");
 			case 4:
 				grid[x][y] = ".";
 				break;
@@ -99,6 +164,7 @@ public class Lakes {
 		return grid;
 	}
 
+	
 	public static boolean palmTreeChance(int dist) {
 		boolean spawn = false;
 		int random = RandomUtils.randomInt(100, 0);
@@ -113,7 +179,6 @@ public class Lakes {
 			if (random < 10) {
 				spawn = true;
 			}
-
 			break;
 		case 3:
 			if (random < 10) {
@@ -145,4 +210,8 @@ public class Lakes {
 		return spawn;
 	}
 
+	
+	
+	
+	
 }

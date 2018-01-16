@@ -8,10 +8,10 @@ public class Islands {
 
 	public static String[][] makeIslands(String[][] grid, String type) {
 		System.out.println("making islands");
-		
+
 		int width = grid.length;
 		int height = grid[0].length;
-		
+
 		Random rand = new Random();
 		int x, y;
 		int numSmall;
@@ -48,7 +48,7 @@ public class Islands {
 
 	public static String[][] island(String[][] grid, int posX, int posY, String size) {
 		System.out.println("island");
-		
+
 		int width = grid.length;
 		int height = grid[0].length;
 		int coreSize;
@@ -75,10 +75,9 @@ public class Islands {
 
 		// make core
 		if (size == "I") {
-			System.out.println("island1");
-			Tools.setBlock(grid, posX, posY, "Q", 3, 3);
+			// make irregular core
+			Tools.setBlock(grid, posX, posY, "Q", RandomUtils.randomInt(6, 1), RandomUtils.randomInt(6, 1));
 		} else {
-			System.out.println("island2");
 			// generate core according to coresize
 			islandSize = width / 5;
 			for (int iY = 0; iY < height; iY++) {
@@ -91,8 +90,7 @@ public class Islands {
 				}
 			}
 		}
-		System.out.println("island3");
-		// iterate
+
 		for (int i = 0; i < iterate; i++) {
 			for (int iY = 0; iY < height; iY++) {
 				for (int iX = 0; iX < width; iX++) {
@@ -100,7 +98,7 @@ public class Islands {
 				}
 			}
 		}
-		
+
 		grid = Tools.convert(grid, "Q", ".");
 		return grid;
 	}
@@ -111,7 +109,7 @@ public class Islands {
 		if (x > 0 && x < width && y > 0 && y < height) {
 			switch (type) {
 			case "Main":
-				switch (Tools.findNumEdges(grid,x, y, "Q")) {
+				switch (Tools.findNumEdges(grid, x, y, "Q")) {
 				case 1:
 					grid = Tools.randomMake(grid, x, y, 30, "Q");
 					break;
@@ -150,7 +148,7 @@ public class Islands {
 		return grid;
 	}
 
-	public static String[][] beach(String[][] grid) {
+	public static String[][] beach(String[][] grid, int beachiness) {
 		System.out.println("making beaches");
 		int width = grid.length;
 		int height = grid[0].length;
@@ -160,17 +158,25 @@ public class Islands {
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = 0; iX < width; iX++) {
 				numLand = 0;
-				numBeach = 0;
-				numBeach = Tools.findNumEdges(grid,iX, iY, "-");
-				numLand = Tools.findNumEdges(grid,iX, iY, ".");
+				numLand = Tools.findNumEdges(grid, iX, iY, ".");
 				if (grid[iX][iY] == "w" && numLand > 0) {
 					grid[iX][iY] = "-";
 				}
-				if (grid[iX][iY] == "w" && numBeach > 0) {
-					grid = Tools.randomMake(grid, iX, iY, 60, "-");
-				}
 			}
 		}
+		for (int i = 0; i < beachiness; i++) {
+			for (int iY = 0; iY < height; iY++) {
+				for (int iX = 0; iX < width; iX++) {
+					numBeach = 0;
+					numBeach = Tools.findNumEdges(grid, iX, iY, "-");
+					if (grid[iX][iY] == "w" && numBeach > 0) {
+						grid = Tools.randomMake(grid, iX, iY, 50, "PLACE");
+					}
+				}
+			}
+			grid = Tools.convert(grid, "PLACE", "-");
+		}
+
 		return grid;
 	}
 

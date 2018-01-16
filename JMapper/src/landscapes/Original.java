@@ -35,7 +35,7 @@ public class Original {
 			grid = Islands.makeIslands(grid, "Main");
 			grid = Forest.makeForest(grid, 1, 4);
 			grid = Mountains.makeMountains(grid, 0, 3);
-			grid = Islands.beach(grid);
+			grid = Islands.beach(grid,2);
 			grid = Rivers.makeRivers(grid, 1, 3);
 			break;
 		case "normal":
@@ -43,12 +43,12 @@ public class Original {
 			initialise();
 
 			// 100
-			// makefor(est(3, 6)
+			// makeforest(3, 6)
 			// makeMountains(1, 5)
 			// makeRiver(3, 5)
 
 			// 200
-			// makefor(est(5, 15)
+			// makeforest(5, 15)
 			// makeMountains(5, 16)
 			// makeRiver(4, 12)
 
@@ -56,7 +56,7 @@ public class Original {
 			grid = Forest.makeForest(grid, 7, 15);
 			grid = Mountains.makeMountains(grid, 8, 16);
 			grid = Rivers.makeRivers(grid, 7, 12);
-
+			grid = Lakes.makeLakes(grid, 0, 2);
 			// 1000
 			// makefor(est(8, 21)
 			// makeMountains(7, 18)
@@ -75,7 +75,7 @@ public class Original {
 			sea = true;
 			initialise();
 			grid = Islands.makeIslands(grid, "archipelago");
-			grid = Islands.beach(grid);
+			grid = Islands.beach(grid, 2);
 			grid = Forest.makeForest(grid, 0, 6);
 			grid = Rivers.makeRivers(grid, 0, 4);
 			break;
