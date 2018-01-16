@@ -6,6 +6,8 @@ import heightmaps.generators.RandomUtils;
 
 public class Rivers {
  
+	private static enum Direction {UP, DOWN, LEFT, RIGHT}
+	
 	public static String[][] makeRivers(String[][] grid, int minRivers, int maxRivers) {
 		Random rand = new Random();
 		int width = grid.length;
@@ -22,12 +24,12 @@ public class Rivers {
 				x = rand.nextInt(width - 1);
 				y = rand.nextInt(height - 1);
 			}
-			grid = river(grid, x, y);
+			grid = river(grid, x, y, 2);
 		}
 		return grid;
 	}
 
-	public static String[][] river(String[][] grid, int posX, int posY) {
+	public static String[][] river(String[][] grid, int posX, int posY, int strength) {
 
 		int width = grid.length;
 		int height = grid[0].length;
@@ -39,37 +41,24 @@ public class Rivers {
 		int x = posX;
 		int y = posY;
 
-		int nextDirection;
-
+		Direction nextDirection = Direction.UP;
+		Direction preferredDirection;
+		switch (RandomUtils.randomInt(4, 1)) {
+		case 1:
+			preferredDirection = Direction.UP;
+			break;
+		case 2:
+			preferredDirection = Direction.DOWN;
+			break;
+		case 3:
+			preferredDirection = Direction.LEFT;
+			break;
+		default:
+			preferredDirection = Direction.RIGHT;
+			break;
+		}
+		
 		boolean stop = false;
-		// Makes a river starting at X and Y and flowing in a random direction
-		// Pick Direction
-
-		// 1
-		// |
-		// 4-------2
-		// |
-		// 3
-		int direction, direction2, direction3, direction4;
-
-		direction = (int) (RandomUtils.randomInt(4, 1));
-
-		if (direction == 4) {
-			direction2 = 1;
-		} else {
-			direction2 = direction + 1;
-		}
-		if (direction2 == 4) {
-			direction3 = 1;
-		} else {
-			direction3 = direction2 + 1;
-		}
-		if (direction3 == 4) {
-			direction4 = 1;
-		} else {
-			direction4 = direction3 + 1;
-		}
-
 		while (!stop) {
 			// Adds length
 			length = length + 1;
@@ -77,35 +66,38 @@ public class Rivers {
 			// Writes River
 			grid[x][y] = "=";
 
-			nextDirection = pickDirection(direction, direction2, direction3, direction4);
+			nextDirection = pickDirection(strength, preferredDirection);
 
 			while (riverCanGo(grid, nextDirection, x, y) == false) {
-				boolean passable = (riverCanGo(grid, 1, x, y) || (riverCanGo(grid, 2, x, y)) || (riverCanGo(grid, 3, x, y))
-						|| (riverCanGo(grid, 4, x, y)));
+				boolean passable = (riverCanGo(grid, Direction.UP, x, y) || (riverCanGo(grid, Direction.DOWN, x, y)) || (riverCanGo(grid, Direction.LEFT, x, y))
+						|| (riverCanGo(grid, Direction.RIGHT, x, y)));
 				if (!passable) {
 					System.out.println("stopping");
 					stop = true;
 					break;
 				}
-				System.out.println("x::");
-				System.out.println(x);
-				System.out.println(y);
-				System.out.println(passable);
+				//System.out.println("x::");
+				//System.out.println(x);
+				//System.out.println(y);
+				//System.out.println(passable);
 
-				nextDirection = pickDirection(direction, direction2, direction3, direction4);
-			}
+				nextDirection = pickDirection(strength, preferredDirection);			}
 			// System.out.println("end");
 
 			// Changes Direction
 			switch (nextDirection) {
-			case 1:
-				y = y - 1;
-			case 2:
-				x = x + 1;
-			case 3:
+			case UP:
 				y = y + 1;
-			case 4:
+				break;
+			case DOWN:
+				y = y - 1;
+				break;
+			case LEFT:
 				x = x - 1;
+				break;
+			case RIGHT:
+				x = x + 1;
+				break;
 			}
 
 			// Stops Crashing
@@ -136,53 +128,51 @@ public class Rivers {
 		return grid;
 	}
 
-	public static int pickDirection(int direction, int direction2, int direction3, int direction4) {
-		int nextDirection = direction;
-		int nextDirectionNum = RandomUtils.randomInt(7, 1);
-
-		switch (nextDirectionNum) {
-		case 1:
-			nextDirection = direction;
-			break;
-		case 2:
-			nextDirection = direction;
-			break;
-		case 3:
-			nextDirection = direction2;
-			break;
-		case 4:
-			nextDirection = direction2;
-			break;
-		case 5:
-			nextDirection = direction3;
-			break;
-		case 6:
-			nextDirection = direction4;
-			break;
+	public static Direction pickDirection(int strength, Direction preferred) {
+		Direction nextDirection;
+		int numChoices = strength+3;
+		int choice = RandomUtils.randomInt(numChoices, 1);
+		Direction[] dirs =new Direction[3]; 
+		int i=0;
+		for (Direction dir:Direction.values()) {
+			if (dir != preferred) {
+				dirs[i++] = dir;
+			}
 		}
+		
+		switch (choice) {
+		case 1:
+			return dirs[0];
+		case 2:
+			return dirs[1];
+		case 3:
+			return dirs[2];
+		default:
+			return preferred;
+		}
+		
 
-		return nextDirection;
 	}
 
-	public static boolean riverCanGo(String[][] grid, int nextDirection, int x, int y) {
+	public static boolean riverCanGo(String[][] grid, Direction nextDirection, int x, int y) {
 		int width = grid.length;
 		int height = grid[0].length;
 
 		switch (nextDirection) {
-		case 1:
-			if ((y > 0) && (grid[x][y - 1] == "x")) {
-				return false;
-			}
-		case 2:
-			if ((x < width - 1) && (grid[x + 1][y] == "x")) {
-				return false;
-			}
-		case 3:
+		case UP:
 			if ((y < height - 1) && (grid[x][y + 1] == "x")) {
 				return false;
 			}
-		case 4:
+		case DOWN:
+			if ((y > 0) && (grid[x][y - 1] == "x")) {
+				return false;
+			}
+		case LEFT:
 			if ((x > 0) && (grid[x - 1][y] == "x")) {
+				return false;
+			}
+		case RIGHT:
+			if ((x < width - 1) && (grid[x + 1][y] == "x")) {
 				return false;
 			}
 		}
