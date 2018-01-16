@@ -1,5 +1,18 @@
+import sys
+import pygame
 
-COLOUR_TABLE: {''}
+SAND  = (244, 209, 66)
+PINK  = (186, 50, 174)
+GRASS = (125, 186, 81)
+BLUE  = (50, 127, 186)
+GREY  = (98, 102, 101)
+LIGHT_BLUE = (114, 219, 219)
+
+
+
+
+
+COLOUR_TABLE = {'^': PINK, '=':BLUE, 'w':LIGHT_BLUE, '-':SAND, '.':GRASS, 'x':GREY}
 
 
 def readmap(fname):
@@ -38,17 +51,13 @@ def drawmap(grid, name):
 	width = len(grid[0])
 	cell_width = window_width / width
 	cell_height = window_height / height
-	grad = gradient_func([(0, 0, 255), (0, 255, 255), (255, 255, 0), (255, 0, 0)])
-
-	 
-	maximum = get_max(grid)
 	#maximum = 800
 	for y in range(height):
 		for x in range(width):
 			#make rect
 			rectangle = ((x*cell_width), (y*cell_height), cell_width, cell_height)  
 			#print rectangle
-			colour = grad(float(grid[y][x]) / maximum)
+			colour = COLOUR_TABLE[grid[y][x].strip()]
 
 			pygame.draw.rect(screen, colour, rectangle)
 	pygame.display.flip()
