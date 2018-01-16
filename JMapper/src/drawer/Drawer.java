@@ -1,17 +1,18 @@
 package drawer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import filehandling.FileHandler;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import landscapes.Original;
 
@@ -31,12 +32,14 @@ public class Drawer extends Application {
 
 	private static int size = 200;
 
+	private static Original map;
+	
 	public static void setGrid(String[][] newGrid) {
 		grid = newGrid;
 	}
 
 	public static void main(String[] args) {
-		Original map = new Original("normal");
+		map = new Original("normal");
 		map.make();
 		grid = map.getGrid();
 		FileHandler.saveStringMap("files/map.txt", map.getGrid());
@@ -75,6 +78,35 @@ public class Drawer extends Application {
 
 		System.out.println(cell_width);
 		System.out.println(cell_height);
+		ArrayList<String> input = new ArrayList<String>();
+
+		FileHandler filer = new FileHandler();
+
+		theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent e) {
+				String code = e.getCode().toString();
+				if (e.getCode()==KeyCode.S) { 
+					filer.saveStringMap("files/map.txt", grid);
+				} else if (e.getCode()==KeyCode.SPACE) { 
+					map = new Original("normal");
+					map.make();
+					grid = map.getGrid();
+
+					for (int iY = 0; iY < height; iY++) {
+						for (int iX = 0; iX < width; iX++) {
+
+							gc.setFill(COLOUR_TABLE.get(grid[iX][iY]));
+							gc.fillRect((iX * cell_width), (iY * cell_height), cell_width, cell_height);
+							theStage.show();
+
+						}
+					}
+
+					theStage.show();
+
+				}
+			}
+		});
 		
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = 0; iX < width; iX++) {
