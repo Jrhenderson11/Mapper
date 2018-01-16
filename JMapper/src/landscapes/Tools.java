@@ -132,12 +132,26 @@ public class Tools {
 	}
 
 	public static String[][] makeCircle(String[][] grid, int posX, int posY, int radius, String fillval) {
-		for (int x = 0; x < radius + 1; x++) {
+		int width = grid.length;
+		int height = grid[0].length;
+		
+		for (int x = 0; x <= radius; x++) {
 			for (int y = 0; y < Math.sqrt((radius * radius) - (x * x)) + 1; y++) {
-				grid[posY + y][posX + x] = fillval;
-				grid[posY + y][posX - x] = fillval;
-				grid[posY - y][posX + x] = fillval;
-				grid[posY - y][posX - x] = fillval;
+				if (posY+y< (height-1)) {
+					if (posX + x < (width-1)) {
+						grid[posY + y][posX + x] = fillval;
+					}
+					if (posX - x > 0) {
+						grid[posY + y][posX - x] = fillval;						
+					}
+				}
+				if (posY-y>0) {
+					if (posX + x < (width-1)) {
+						grid[posY - y][posX + x] = fillval;					}
+					if (posX - x > 0) {
+						grid[posY - y][posX - x] = fillval;
+					}
+				}
 			}
 		}
 
