@@ -34,12 +34,15 @@ public class Drawer extends Application {
 
 	private static Original map;
 	
+	private static String type = "archipelago"; 
+	
 	public static void setGrid(String[][] newGrid) {
 		grid = newGrid;
 	}
 
 	public static void main(String[] args) {
-		map = new Original("normal");
+		
+		map = new Original(type);
 		map.make();
 		grid = map.getGrid();
 		FileHandler.saveStringMap("files/map.txt", map.getGrid());
@@ -52,7 +55,7 @@ public class Drawer extends Application {
 	public static void fillColourTable() {
 		COLOUR_TABLE.put("^", DARK_GREEN);
 		COLOUR_TABLE.put("=", BLUE);
-		COLOUR_TABLE.put("W", LIGHT_BLUE);
+		COLOUR_TABLE.put("w", LIGHT_BLUE);
 		COLOUR_TABLE.put("-", SAND);
 		COLOUR_TABLE.put("x", GREY);
 		COLOUR_TABLE.put(".", GRASS);
@@ -88,7 +91,7 @@ public class Drawer extends Application {
 				if (e.getCode()==KeyCode.S) { 
 					filer.saveStringMap("files/map.txt", grid);
 				} else if (e.getCode()==KeyCode.SPACE) { 
-					map = new Original("normal");
+					map = new Original(type);
 					map.make();
 					grid = map.getGrid();
 
