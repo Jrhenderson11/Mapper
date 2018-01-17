@@ -68,6 +68,36 @@ public class Tools {
 		return count + findNumEdges(grid, x, y, tile);
 	}
 
+	public static int getNumEdgesRadius(String[][] grid, int posX, int posY, String tile ,int radius) {
+		int sum = 0;
+		
+		int width = grid.length;
+		int height = grid[0].length;
+		
+		for (int x = 0; x < radius; x++) {
+			for (int y = 0; y < Math.sqrt((radius * radius) - (x * x)); y++) {
+				if (posX > 0 && posY > 0) {
+					if (grid[posY - y][posX - x].equals(tile)) {
+						sum++;
+					}
+				} else if (posX > 0 && posY < height) {
+					if (grid[posY + y][posX - x].equals(tile)) {
+						sum++;
+					}
+				} else if (posX < width && posY < height) {
+					if (grid[posY + y][posX + x].equals(tile)) {
+						sum++;
+					}
+				} else if (posX < width && posY > 0) {
+					if (grid[posY - y][posX + x].equals(tile)) {
+						sum++;
+					}
+				}
+			}
+		}
+		return sum;
+	}
+	
 	public static String[][] randomMake(String[][] grid, int x, int y, int chance, String tile) {
 		int ran = RandomUtils.randomInt(100, 0);
 		if (ran <= chance) {

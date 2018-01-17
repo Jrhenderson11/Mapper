@@ -45,38 +45,12 @@ public class Forest {
 			grid[posX][posY] = "^";
 			break;
 		case 2:
-			for (int iY = 0; iY < height; iY++) {
-				for (int iX = 0; iX < width; iX++) {
-					dist = (int) Math
-							.round(Math.abs(Math.sqrt(((iX - posX) * (iX - posX)) + ((iY - posY) * (iY - posY)))));
-					if (dist < 3) {
-						grid[iX][iY] = "^";
-					}
-				}
-			}
+			grid = Tools.makeCircle(grid, posX, posY, 6, "^");
 			break;
 		case 3:
-			for (int iY = 0; iY < height; iY++) {
-				for (int iX = 0; iX < width; iX++) {
-					dist = (int) Math
-							.round(Math.abs(Math.sqrt(((iX - posX) * (iX - posX)) + ((iY - posY) * (iY - posY)))));
-					if (dist < 7) {
-						grid[iX][iY] = "^";
-					}
-				}
-			}
-			break;
+			grid = Tools.makeCircle(grid, posX, posY, 7, "^");			break;
 		case 4:
-			for (int iY = 0; iY < height; iY++) {
-				for (int iX = 0; iX < width; iX++) {
-					dist = (int) Math
-							.round(Math.abs(Math.sqrt(((iX - posX) * (iX - posX)) + ((iY - posY) * (iY - posY)))));
-					if (dist < 12) {
-						grid[iX][iY] = "^";
-					}
-				}
-			}
-
+			grid = Tools.makeCircle(grid, posX, posY, 12, "^");
 			break;
 		}
 		// ADD EDGES
@@ -117,5 +91,7 @@ public class Forest {
 		}
 		return grid;
 	}
+	
+	
 
 }
