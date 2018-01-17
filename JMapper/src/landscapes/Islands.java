@@ -77,7 +77,9 @@ public class Islands {
 		if (size == "I") {
 			// make irregular core
 			//grid = Tools.setBlock(grid, posX, posY, "Q", RandomUtils.randomInt(6, 1), RandomUtils.randomInt(6, 1));
-			grid = irregularCore(grid, posX, posY);
+
+			coreSize = RandomUtils.randomPosGaussian(1, 3);
+			grid = irregularCore(grid, posX, posY, coreSize);
 		} else {
 			// generate core according to coresize
 			islandSize = width / 5;
@@ -104,13 +106,13 @@ public class Islands {
 		return grid;
 	}
 
-	public static String[][] irregularCore(String[][] grid, int posX, int posY) {
+	public static String[][] irregularCore(String[][] grid, int posX, int posY, int size) {
 		int width = grid.length;
 		int height = grid[0].length;
 	
 		
 		//pick num shapes
-		int numShapes = RandomUtils.randomPosGaussian(1, 1);
+		int numShapes = RandomUtils.randomPosGaussian(1, size);
 		
 		//pick shapes
 		for (int i=0; i<numShapes; i++) {
