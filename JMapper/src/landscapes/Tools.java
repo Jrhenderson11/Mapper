@@ -79,8 +79,8 @@ public class Tools {
 	public static String[][] setBlock(String[][] grid, int posX, int posY, String tile, int rectWidth, int rectHeight) {
 		int width = grid.length;
 		int height = grid[0].length;
-		for (int y = posY; (y - posY < rectHeight) && (y < height); y++) {
-			for (int x = posX; (x - posX < rectWidth) && (x < width); x++) {
+		for (int y = posY; (y - posY < rectHeight) && (y < height) && (y>0); y++) {
+			for (int x = posX; (x - posX < rectWidth) && (x < width) && (x>0); x++) {
 				grid[x][y] = tile;
 			}
 		}
@@ -160,11 +160,12 @@ public class Tools {
 	}
 
 	public static String[][] makeEllipse(String[][] grid, int posX, int posY, int xRadius, int yRadius, String fillval) {
-		if (xRadius<1 || yRadius < 1) {
-			return grid;
-		}
+		
 		int width = grid.length;
 		int height = grid[0].length;
+		if (xRadius<1 || yRadius < 1 || posX<0||posY<0||posX>width-1||posY>height-1) {
+			return grid;
+		}
 		int xysq = ((xRadius * xRadius) * (yRadius * yRadius));
 		for (int x = 0;  ((yRadius * yRadius)*(x * x)) <= xysq; x++) {
 			for (int y = 0; y < Math.sqrt((xysq - ((yRadius * yRadius)*(x * x)))/(xRadius*xRadius)); y++) {

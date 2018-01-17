@@ -116,11 +116,9 @@ public class Islands {
 		
 		//pick shapes
 		for (int i=0; i<numShapes; i++) {
-			
-			
 			//pick X and Y (gauss from posX)
-			int x = RandomUtils.randomGaussian(posX, width/20);
-			int y = RandomUtils.randomGaussian(posY, height/20);
+			int x = RandomUtils.randomGaussian(posX, width/15);
+			int y = RandomUtils.randomGaussian(posY, height/15);
 
 			int islandWidth = RandomUtils.randomPosGaussian(5, 10);
 			int islandHeight = RandomUtils.randomPosGaussian(5, 10);
@@ -129,11 +127,11 @@ public class Islands {
 			switch (RandomUtils.randomInt(1, 0)) {
 			case 0:
 				//rect
-				Tools.setBlock(grid, posX, posY, "Q", islandWidth, islandHeight);
+				Tools.setBlock(grid, x, y, "Q", islandWidth, islandHeight);
 				break;
 			case 1:
 				//ellipse
-				Tools.makeEllipse(grid, posX, posY,islandWidth, islandHeight, "Q");
+				Tools.makeEllipse(grid, x, y,islandWidth, islandHeight, "Q");
 				break;
 			}
 			
