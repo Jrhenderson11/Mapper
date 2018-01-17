@@ -33,10 +33,6 @@ public class Original {
 			sea = true;
 			initialise();
 			grid = Islands.makeIslands(grid, "Main");
-			grid = Forest.makeForest(grid, 1, 4);
-			grid = Mountains.makeMountains(grid, 0, 3);
-			grid = Islands.beach(grid,2);
-			grid = Rivers.makeRivers(grid, 1, 3);
 			break;
 		case "normal":
 			sea = false;
@@ -74,10 +70,15 @@ public class Original {
 		case "archipelago":
 			sea = true;
 			initialise();
-			grid = Islands.makeIslands(grid, "archipelago");
-			grid = Islands.beach(grid, 2);
-			grid = Forest.makeForest(grid, 0, 6);
-			grid = Rivers.makeRivers(grid, 0, 4);
+			grid = Islands.makeArchipelago(grid);
+			break;
+		case "black forest":
+			sea = false;
+			initialise();
+			grid = Forest.makeForest(grid, 12, 21);
+			grid = Mountains.makeMountains(grid, 7, 18);
+			grid = Rivers.makeRivers(grid, 5, 15);
+
 			break;
 		}
 	}

@@ -6,6 +6,22 @@ import heightmaps.generators.RandomUtils;
 
 public class Islands {
 
+	public static String[][] makeArchipelago(String[][] grid) {
+		
+		
+		return grid;
+	}
+	
+	public static String[][] makeInterestingIslands(String[][] grid) {
+		grid = Islands.makeIslands(grid, "archipelago");
+		grid = Islands.beach(grid, 2);
+		grid = Forest.makeForest(grid, 0, 6);
+		grid = Rivers.makeRivers(grid, 0, 4);
+
+		return grid;
+	} 
+	
+	
 	public static String[][] makeIslands(String[][] grid, String type) {
 		System.out.println("making islands");
 
@@ -23,7 +39,11 @@ public class Islands {
 		case "Main":
 
 			grid = island(grid, x, y, "Main");
-			numSmall = RandomUtils.randomPosGaussian(5, 3);
+			grid = Forest.makeForest(grid, 1, 4);
+			grid = Mountains.makeMountains(grid, 0, 3);
+			grid = Islands.beach(grid,2);
+			grid = Rivers.makeRivers(grid, 1, 3);
+
 			break;
 
 		case "archipelago":
@@ -79,9 +99,9 @@ public class Islands {
 			//grid = Tools.setBlock(grid, posX, posY, "Q", RandomUtils.randomInt(6, 1), RandomUtils.randomInt(6, 1));
 
 			coreSize = RandomUtils.randomPosGaussian(1, 3);
-			grid = irregularCore(grid, posX, posY, coreSize);
+			grid = irregularCore(grid, posX, posY, coreSize, "Q");
 		} else {
-			// generate core according to coresize
+		/*	// generate core according to coresize
 			islandSize = width / 5;
 			for (int iY = 0; iY < height; iY++) {
 				for (int iX = 0; iX < width; iX++) {
@@ -91,7 +111,8 @@ public class Islands {
 						grid[iX][iY] = "Q";
 					}
 				}
-			}
+			}*/
+			grid = irregularCore(grid, posX, posY, 30, "Q");
 		}
 
 		for (int i = 0; i < iterate; i++) {
@@ -106,7 +127,7 @@ public class Islands {
 		return grid;
 	}
 
-	public static String[][] irregularCore(String[][] grid, int posX, int posY, int size) {
+	public static String[][] irregularCore(String[][] grid, int posX, int posY, int size, String tile) {
 		int width = grid.length;
 		int height = grid[0].length;
 	
@@ -117,8 +138,8 @@ public class Islands {
 		//pick shapes
 		for (int i=0; i<numShapes; i++) {
 			//pick X and Y (gauss from posX)
-			int x = RandomUtils.randomGaussian(posX, width/15);
-			int y = RandomUtils.randomGaussian(posY, height/15);
+			int x = RandomUtils.randomGaussian(posX, width/20);
+			int y = RandomUtils.randomGaussian(posY, height/20);
 
 			int islandWidth = RandomUtils.randomPosGaussian(5, 10);
 			int islandHeight = RandomUtils.randomPosGaussian(5, 10);
@@ -127,11 +148,11 @@ public class Islands {
 			switch (RandomUtils.randomInt(1, 0)) {
 			case 0:
 				//rect
-				Tools.setBlock(grid, x, y, "Q", islandWidth, islandHeight);
+				Tools.setBlock(grid, x, y, tile, islandWidth, islandHeight);
 				break;
 			case 1:
 				//ellipse
-				Tools.makeEllipse(grid, x, y,islandWidth, islandHeight, "Q");
+				Tools.makeEllipse(grid, x, y, islandWidth, islandHeight, tile);
 				break;
 			}
 			
@@ -142,7 +163,6 @@ public class Islands {
 		
 		return grid;
 	}
-	
 	
 	public static String[][] islandEdge(String[][] grid, int x, int y, String type) {
 		int width = grid.length;
