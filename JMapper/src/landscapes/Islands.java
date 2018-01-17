@@ -76,7 +76,8 @@ public class Islands {
 		// make core
 		if (size == "I") {
 			// make irregular core
-			Tools.setBlock(grid, posX, posY, "Q", RandomUtils.randomInt(6, 1), RandomUtils.randomInt(6, 1));
+			//grid = Tools.setBlock(grid, posX, posY, "Q", RandomUtils.randomInt(6, 1), RandomUtils.randomInt(6, 1));
+			grid = irregularCore(grid, posX, posY);
 		} else {
 			// generate core according to coresize
 			islandSize = width / 5;
@@ -103,6 +104,46 @@ public class Islands {
 		return grid;
 	}
 
+	public static String[][] irregularCore(String[][] grid, int posX, int posY) {
+		int width = grid.length;
+		int height = grid[0].length;
+	
+		
+		//pick num shapes
+		int numShapes = RandomUtils.randomPosGaussian(1, 1);
+		
+		//pick shapes
+		for (int i=0; i<numShapes; i++) {
+			
+			
+			//pick X and Y (gauss from posX)
+			int x = RandomUtils.randomGaussian(posX, width/20);
+			int y = RandomUtils.randomGaussian(posY, height/20);
+
+			int islandWidth = RandomUtils.randomPosGaussian(5, 10);
+			int islandHeight = RandomUtils.randomPosGaussian(5, 10);
+
+			//pick shape
+			switch (RandomUtils.randomInt(1, 0)) {
+			case 0:
+				//rect
+				Tools.setBlock(grid, posX, posY, "Q", islandWidth, islandHeight);
+				break;
+			case 1:
+				//ellipse
+				Tools.makeEllipse(grid, posX, posY,islandWidth, islandHeight, "Q");
+				break;
+			}
+			
+			
+			
+		}
+		
+		
+		return grid;
+	}
+	
+	
 	public static String[][] islandEdge(String[][] grid, int x, int y, String type) {
 		int width = grid.length;
 		int height = grid[0].length;

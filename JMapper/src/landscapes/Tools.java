@@ -160,6 +160,9 @@ public class Tools {
 	}
 
 	public static String[][] makeEllipse(String[][] grid, int posX, int posY, int xRadius, int yRadius, String fillval) {
+		if (xRadius<1 || yRadius < 1) {
+			return grid;
+		}
 		int width = grid.length;
 		int height = grid[0].length;
 		int xysq = ((xRadius * xRadius) * (yRadius * yRadius));
