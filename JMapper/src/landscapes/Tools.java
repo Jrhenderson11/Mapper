@@ -68,28 +68,28 @@ public class Tools {
 		return count + findNumEdges(grid, x, y, tile);
 	}
 
-	public static int getNumEdgesRadius(String[][] grid, int posX, int posY, String tile ,int radius) {
+	public static int findNumEdgesRadius(String[][] grid, int posX, int posY, String tile, int radius) {
 		int sum = 0;
-		
+
 		int width = grid.length;
 		int height = grid[0].length;
-		
+
 		for (int x = 0; x < radius; x++) {
 			for (int y = 0; y < Math.sqrt((radius * radius) - (x * x)); y++) {
-				if (posX > 0 && posY > 0) {
-					if (grid[posY - y][posX - x].equals(tile)) {
+				if (posX - x > 0 && posY - y > 0) {
+					if (grid[posX - x][posY - y].equals(tile)) {
 						sum++;
 					}
-				} else if (posX > 0 && posY < height) {
-					if (grid[posY + y][posX - x].equals(tile)) {
+				} else if (posX - x > 0 && posY + y < height) {
+					if (grid[posX - x][posY + y].equals(tile)) {
 						sum++;
 					}
-				} else if (posX < width && posY < height) {
-					if (grid[posY + y][posX + x].equals(tile)) {
+				} else if (posX+x < width && posY+y < height) {
+					if (grid[posX+x][posY+y].equals(tile)) {
 						sum++;
 					}
-				} else if (posX < width && posY > 0) {
-					if (grid[posY - y][posX + x].equals(tile)) {
+				} else if (posX+x < width && posY-y > 0) {
+					if (grid[posX + x][posY-y].equals(tile)) {
 						sum++;
 					}
 				}
@@ -97,7 +97,29 @@ public class Tools {
 		}
 		return sum;
 	}
-	
+
+	public static int findNumTilesRadius(String[][] grid, int posX, int posY, int radius) {
+		int sum = 0;
+
+		int width = grid.length;
+		int height = grid[0].length;
+
+		for (int x = 0; x < radius; x++) {
+			for (int y = 0; y < Math.sqrt((radius * radius) - (x * x)); y++) {
+				if (posX > 0 && posY > 0) {
+					sum++;
+				} else if (posX > 0 && posY < height) {
+					sum++;
+				} else if (posX < width && posY < height) {
+					sum++;
+				} else if (posX < width && posY > 0) {
+					sum++;
+				}
+			}
+		}
+		return sum;
+	}
+
 	public static String[][] randomMake(String[][] grid, int x, int y, int chance, String tile) {
 		int ran = RandomUtils.randomInt(100, 0);
 		if (ran <= chance) {
@@ -109,8 +131,8 @@ public class Tools {
 	public static String[][] setBlock(String[][] grid, int posX, int posY, String tile, int rectWidth, int rectHeight) {
 		int width = grid.length;
 		int height = grid[0].length;
-		for (int y = posY; (y - posY < rectHeight) && (y < height) && (y>0); y++) {
-			for (int x = posX; (x - posX < rectWidth) && (x < width) && (x>0); x++) {
+		for (int y = posY; (y - posY < rectHeight) && (y < height) && (y > 0); y++) {
+			for (int x = posX; (x - posX < rectWidth) && (x < width) && (x > 0); x++) {
 				grid[x][y] = tile;
 			}
 		}
@@ -189,17 +211,18 @@ public class Tools {
 		return grid;
 	}
 
-	public static String[][] makeEllipse(String[][] grid, int posX, int posY, int xRadius, int yRadius, String fillval) {
-		
+	public static String[][] makeEllipse(String[][] grid, int posX, int posY, int xRadius, int yRadius,
+			String fillval) {
+
 		int width = grid.length;
 		int height = grid[0].length;
-		if (xRadius<1 || yRadius < 1 || posX<0||posY<0||posX>width-1||posY>height-1) {
+		if (xRadius < 1 || yRadius < 1 || posX < 0 || posY < 0 || posX > width - 1 || posY > height - 1) {
 			return grid;
 		}
 		int xysq = ((xRadius * xRadius) * (yRadius * yRadius));
-		for (int x = 0;  ((yRadius * yRadius)*(x * x)) <= xysq; x++) {
-			for (int y = 0; y < Math.sqrt((xysq - ((yRadius * yRadius)*(x * x)))/(xRadius*xRadius)); y++) {
-								
+		for (int x = 0; ((yRadius * yRadius) * (x * x)) <= xysq; x++) {
+			for (int y = 0; y < Math.sqrt((xysq - ((yRadius * yRadius) * (x * x))) / (xRadius * xRadius)); y++) {
+
 				if (posY + y < (height - 1)) {
 					if (posX + x < (width - 1)) {
 						grid[posY + y][posX + x] = fillval;

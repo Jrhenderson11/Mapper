@@ -64,7 +64,7 @@ public class Lakes {
 		
 		grid = Tools.makeEllipse(grid, x, y, RandomUtils.randomPosGaussian(15, 7), RandomUtils.randomPosGaussian(15, 7),
 				"L");
-		grid = expandLake(grid, "L", 7);
+		grid = expandLake2(grid, "L", 7);
 		grid = Tools.convert(grid, "L", "=");
 		// Expand Pool
 
@@ -78,14 +78,7 @@ public class Lakes {
 				}
 			}
 		}
-		for (int i = 0; i < 3; i++) {
-			for (int iY = 0; iY < height; iY++) {
-				for (int iX = 0; iX < width; iX++) {
-					// grid = treeEdge(grid, iX, iY);
-				}
-			}
-		}
-		// Trees
+			// Trees
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = 0; iX < width; iX++) {
 				distance = (int) Math.round(Math.abs(Math.sqrt(((iX - x) * (iX - x)) + ((iY - y) * (iY - y)))));
@@ -145,7 +138,7 @@ public class Lakes {
 		// block chance method
 		return grid;
 	}
-
+	
 	public static String[][] expandLake(String[][] grid, String waterTile, int iter) {
 		int width = grid.length;
 		int height = grid[0].length;
@@ -169,6 +162,72 @@ public class Lakes {
 								Tools.randomMake(grid, x, y, 75, waterTile);
 								break;
 							}
+						}
+					}
+				}
+			}
+		}
+		return grid;
+	}
+	
+	public static String[][] expandLake2(String[][] grid, String waterTile, int iter) {
+		int width = grid.length;
+		int height = grid[0].length;
+		for (int i = 0; i < iter; i++) {
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if (x > 0 && x < width && y > 0 && y < height) {
+						if (grid[x][y] != "w") {
+							// checks not sea
+							int num = Tools.findNumEdgesRadius(grid, x, y, waterTile, 5);
+							if (num > Tools.findNumTilesRadius(grid, x, y, 5)/10) { 	
+								Tools.randomMake(grid, x, y, (num*10), "LE");
+							}			
+						}
+					}
+				}
+			}
+		}
+		grid = Tools.convert(grid, "LE", waterTile);
+		return grid;
+	}
+
+	//smears SE
+	public static String[][] expandLake3(String[][] grid, String waterTile, int iter) {
+		int width = grid.length;
+		int height = grid[0].length;
+		for (int i = 0; i < iter; i++) {
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if (x > 0 && x < width && y > 0 && y < height) {
+						if (grid[x][y] != "w") {
+							// checks not sea
+							int num = Tools.findNumEdgesRadius(grid, x, y, waterTile, 3);
+							if (num > Tools.findNumTilesRadius(grid, x, y, 3)/5) { 	
+								Tools.randomMake(grid, x, y, (num*10), waterTile);
+							}			
+						}
+					}
+				}
+			}
+		}
+		grid = Tools.convert(grid, "LE", waterTile);
+		return grid;
+	}
+	
+	public static String[][] sprinkleWater(String[][] grid, String waterTile, int iter) {
+		int width = grid.length;
+		int height = grid[0].length;
+		for (int i = 0; i < iter; i++) {
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if (x > 0 && x < width && y > 0 && y < height) {
+						if (grid[x][y] != "w") {
+							// checks not sea
+							int num = Tools.findNumEdgesRadius(grid, x, y, waterTile, 3);
+							num /= Tools.findNumTilesRadius(grid, x, y, 3);
+							Tools.randomMake(grid, x, y, (num*40), waterTile);
+							
 						}
 					}
 				}
