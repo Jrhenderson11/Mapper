@@ -7,8 +7,10 @@ import heightmaps.generators.RandomUtils;
 public class Islands {
 
 	public static String[][] makeArchipelago(String[][] grid) {
-		
-		
+		grid = Islands.makeIslands(grid, "archipelago");
+		grid = Islands.beach(grid, 2);
+		grid = Forest.makeForest(grid, 0, 6);
+		grid = Rivers.makeRivers(grid, 0, 4);		
 		return grid;
 	}
 	
@@ -20,7 +22,6 @@ public class Islands {
 
 		return grid;
 	} 
-	
 	
 	public static String[][] makeIslands(String[][] grid, String type) {
 		System.out.println("making islands");

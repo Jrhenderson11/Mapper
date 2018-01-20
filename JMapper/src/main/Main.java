@@ -24,12 +24,12 @@ public class Main extends Application {
 		Drawer.fillColourTable();
 		Drawer.launch();
 
-		//drawMap();
+		drawMap();
 	}
 	
 	public static void drawHeatmap() {
 		try {
-			Runtime.getRuntime().exec("python ../heatmap-render/heatmap.py files/map.txt");
+			Runtime.getRuntime().exec("python ../heightmap-render/heightmap.py files/map.txt");
 		} catch (IOException e) {
 			System.out.println("Cannot display");
 		}

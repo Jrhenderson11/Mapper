@@ -57,6 +57,8 @@ public class Original {
 			// makefor(est(8, 21)
 			// makeMountains(7, 18)
 			// makeRiver(7, 15)
+			grid = Rivers.riverBanks(grid);
+			
 			break;
 		case "desert":
 			sea = false;

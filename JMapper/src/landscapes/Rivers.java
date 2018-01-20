@@ -208,7 +208,7 @@ public class Rivers {
 		int height = grid[0].length;
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = 0; iX < width; iX++) {
-				if (grid[iX][iY] == "-" && Tools.findNumEdges(grid, iX, iY, "=") > 0) {
+				if (!grid[iX][iY].equals("=") && Tools.findNumEdges(grid, iX, iY, "=") > 0) {
 					grid = Tools.randomMake(grid, iX, iY, 70, ".");
 				}
 			}

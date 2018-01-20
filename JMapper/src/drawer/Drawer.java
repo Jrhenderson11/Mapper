@@ -30,7 +30,7 @@ public class Drawer extends Application {
 	private static String[][] grid;
 	private static int size = 200;
 	private static Original map;
-	private static String type = "normal"; 
+	private static String type = "archipelago";
 	
 	public static void setGrid(String[][] newGrid) {
 		grid = newGrid;
