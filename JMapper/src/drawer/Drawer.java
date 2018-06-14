@@ -1,5 +1,6 @@
 package drawer;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,6 +33,11 @@ public class Drawer extends Application {
 	private static Original map;
 	private static String type = "archipelago";
 	
+	private static Point coords = new Point(0,0);
+	private static int zoomLevel;
+	private static int SPEED = 4;
+	
+	
 	public static void setGrid(String[][] newGrid) {
 		grid = newGrid;
 	}
@@ -39,8 +45,11 @@ public class Drawer extends Application {
 	public static void main(String[] args) {
 		
 		map = new Original(type);
+
 		map.make();
 		grid = map.getGrid();
+
+		zoomLevel = grid.length;
 		FileHandler.saveStringMap("files/map.txt", map.getGrid());
 
 		setGrid(grid);
@@ -72,8 +81,11 @@ public class Drawer extends Application {
 		int width = grid.length;
 		int height = grid[0].length;
 
-		double cell_width = canvas.getWidth() / width;
-		double cell_height = canvas.getHeight() / height;
+		
+		
+		
+		double cell_width = canvas.getWidth() / zoomLevel;
+		double cell_height = canvas.getHeight() / zoomLevel;
 
 		System.out.println(cell_width);
 		System.out.println(cell_height);
@@ -84,39 +96,83 @@ public class Drawer extends Application {
 		theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				String code = e.getCode().toString();
-				if (e.getCode()==KeyCode.S) { 
+				if (e.getCode()==KeyCode.Z) { 
 					filer.saveStringMap("files/map.txt", grid);
 				} else if (e.getCode()==KeyCode.SPACE) { 
 					map = new Original(type);
 					map.make();
 					grid = map.getGrid();
-
-					for (int iY = 0; iY < height; iY++) {
-						for (int iX = 0; iX < width; iX++) {
-
-							gc.setFill(COLOUR_TABLE.get(grid[iX][iY]));
-							gc.fillRect((iX * cell_width), (iY * cell_height), cell_width, cell_height);
-							theStage.show();
-
-						}
-					}
-
+					drawMap(grid, canvas);
+			
 					theStage.show();
 
+				} else if (e.getCode()==KeyCode.UP) {
+					if (zoomLevel > 4) {
+						zoomLevel-=2;
+					}
+					drawMap(grid, canvas);
+					
+					theStage.show();
+				} else if (e.getCode()==KeyCode.DOWN) {
+					if (zoomLevel < grid.length-1) {
+						zoomLevel+=2;
+					}
+					drawMap(grid, canvas);
+					
+					theStage.show();
+				} else if (e.getCode()==KeyCode.W) {
+					
+					if (coords.y > 0 ) {
+						coords.translate(0, -SPEED);
+					}
+					drawMap(grid, canvas);
+				} else if (e.getCode()==KeyCode.S) {
+					if (coords.y+zoomLevel < grid.length) {
+						coords.translate(0, SPEED);
+					}
+					
+					drawMap(grid, canvas);
+				} else if (e.getCode()==KeyCode.A) {
+					if (coords.x > 0 ) {
+						coords.translate(-SPEED, 0);
+					}
+					drawMap(grid, canvas);
+				} else if (e.getCode()==KeyCode.D) {
+					if (coords.x+zoomLevel < grid[0].length) {
+						coords.translate(SPEED, 0);
+					}
+					drawMap(grid, canvas);
 				}
+				
 			}
 		});
 		
-		for (int iY = 0; iY < height; iY++) {
-			for (int iX = 0; iX < width; iX++) {
+		
 
-				gc.setFill(COLOUR_TABLE.get(grid[iX][iY]));
-				gc.fillRect((iX * cell_width), (iY * cell_height), cell_width, cell_height);
-				theStage.show();
+		
+		drawMap(grid, canvas);
 
+		theStage.show();
+	}
+	
+	
+	private void drawMap(String[][] map, Canvas canvas) {
+		double cell_width = canvas.getWidth() / zoomLevel;
+		double cell_height = canvas.getHeight() / zoomLevel;
+
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		
+		
+		for (int iY = coords.y; iY < coords.y+zoomLevel; iY++) {
+			for (int iX = coords.x; iX < coords.x+zoomLevel; iX++) {
+				try {
+					gc.setFill(COLOUR_TABLE.get(grid[iX][iY]));
+					gc.fillRect(((iX-coords.x) * cell_width), ((iY-coords.y) * cell_height), Math.ceil(cell_width), Math.ceil(cell_height));
+				} catch (Exception e) {
+					
+				}
 			}
 		}
 
-		theStage.show();
 	}
 }

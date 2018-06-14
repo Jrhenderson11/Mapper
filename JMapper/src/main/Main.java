@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import drawer.Drawer;
 import filehandling.FileHandler;
+import heightmaps.generators.Mountains;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import landscapes.Original;
@@ -15,7 +16,9 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		//int[][] grid = new int[size][size];
 		//grid = {{1,2,3,4,5},{1,2,3,4,5},{1,2,3,4,5},{1,2,3,4,5},{1,2,3,4,5}};
-		Original map = new Original("desert");
+		mountain();
+		
+		/*Original map = new Original("desert");
 		map.make();
 		String[][] grid = map.getGrid();
 		FileHandler.saveStringMap("files/map.txt", map.getGrid());
@@ -24,12 +27,19 @@ public class Main extends Application {
 		Drawer.fillColourTable();
 		Drawer.launch();
 
-		drawMap();
+		drawMap();*/
 	}
 	
-	public static void drawHeatmap() {
+	private static void mountain() {
+		int[][] grid = new int[size][size];
+		grid = Mountains.make3ConeMountain(grid);
+		FileHandler.saveMap("files/mountain.csv", grid);
+		drawHeatmap("files/mountain.csv");
+	}
+	
+	public static void drawHeatmap(String fname) {
 		try {
-			Runtime.getRuntime().exec("python ../heightmap-render/heightmap.py files/map.txt");
+			Runtime.getRuntime().exec("python ../heightmap-render/heightmap.py " + fname);
 		} catch (IOException e) {
 			System.out.println("Cannot display");
 		}

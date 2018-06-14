@@ -2,7 +2,7 @@ package heightmaps.generators;
 
 public class Mountains {
 
-	public int[][] makeConeMountain(int[][] grid) {
+	public static int[][] makeConeMountain(int[][] grid) {
 		//select x, y
 		
 		int posY = grid.length/2;
@@ -26,7 +26,7 @@ public class Mountains {
 		return grid;
 	}
 	
-	public int[][] make3ConeMountain(int[][] grid) {
+	public static int[][] make3ConeMountain(int[][] grid) {
 		//select x, y
 		
 		int posY = grid.length/2;
