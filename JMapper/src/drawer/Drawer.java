@@ -35,6 +35,7 @@ public class Drawer extends Application {
 	
 	private static Point coords = new Point(0,0);
 	private static int zoomLevel;
+	private static int ZOOMSPEED = 2;
 	private static int SPEED = 4;
 	
 	
@@ -108,14 +109,21 @@ public class Drawer extends Application {
 
 				} else if (e.getCode()==KeyCode.UP) {
 					if (zoomLevel > 4) {
-						zoomLevel-=2;
+						zoomLevel-=ZOOMSPEED;
 					}
 					drawMap(grid, canvas);
 					
 					theStage.show();
 				} else if (e.getCode()==KeyCode.DOWN) {
 					if (zoomLevel < grid.length-1) {
-						zoomLevel+=2;
+						zoomLevel+=ZOOMSPEED;
+					
+						if (coords.y+zoomLevel > grid.length) {
+							coords.translate(0, -ZOOMSPEED);
+						}
+						if (coords.x+zoomLevel > grid[0].length) {
+							coords.translate(-ZOOMSPEED, 0);
+						}
 					}
 					drawMap(grid, canvas);
 					
