@@ -7,14 +7,31 @@ import heightmaps.generators.RandomUtils;
 
 public class Original {
 
-	private int width = 300;
-	private int height = 300;
-	private String[][] grid = new String[width][height];
+	private int width;
+	private int height;
+	private String[][] grid;
 	private boolean sea;
 	private String mode;
 
 	public Original(String newMode) {
 		this.mode = newMode;
+		this.width = 300;
+		this.height = 300;
+		this.grid = new String[width][height];
+	}
+	
+	public Original(String newMode, int size) {
+		this.mode = newMode;
+		this.width = size;
+		this.height = size;
+		this.grid = new String[width][height];
+	}
+	
+	public Original(String newMode, int newWidth, int newHeight) {
+		this.mode = newMode;
+		this.width = newWidth;
+		this.height = newHeight;
+		this.grid = new String[width][height];
 	}
 
 	public String[][] getGrid() {
