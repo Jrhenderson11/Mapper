@@ -119,12 +119,10 @@ public class Noise {
 		double exponent = 5.31;
 
 		double e1 = 0.81, e2 = 0.88, e3 = 0.4, e4 = 0.4, e5 = 0.06, e6 = 0.06;
-		double m1 = 1, m2 = 0.75, m3 = 0.38, m4 = 0, m5 = 0.33, m6 = 0.5;
 		Random random = new Random();
 
 		OpenSimplexNoise gen1 = new OpenSimplexNoise(random.nextLong());
-		OpenSimplexNoise gen2 = new OpenSimplexNoise(new Random().nextLong());
-
+	
 		double elevation;
 
 		for (int y = 0; y < height; y++) {
@@ -157,7 +155,7 @@ public class Noise {
 		double exponent = 5.31;
 
 		double e1 = 0.81, e2 = 0.88, e3 = 0.94, e4 = 0.4, e5 = 0.06, e6 = 0.06;
-		double m1 = 1, m2 = 0.75, m3 = 0.38, m4 = 0, m5 = 0.33, m6 = 0.5;
+		double m1 = 1, m2 = 0.9, m3 = 0.38, m4 = 0.3, m5 = 0.33, m6 = 0.3;
 		Random random = new Random();
 
 		OpenSimplexNoise gen1 = new OpenSimplexNoise(random.nextLong());
@@ -175,6 +173,9 @@ public class Noise {
 						+ e5 * noise1(gen1, 16 * nx, 16 * ny) + e6 * noise1(gen1, 32 * nx, 32 * ny));
 				elevation /= (e1 + e2 + e3 + e4 + e5 + e6);
 				elevation = Math.pow(elevation, exponent);
+				//nx = x / (width*3) - 0.5;
+				//ny = y / (height*3) - 0.5;
+
 				moisture = (m1 * noise2(gen2, 1 * nx, 1 * ny) + m2 * noise2(gen2, 2 * nx, 2 * ny)
 						+ m3 * noise2(gen2, 4 * nx, 4 * ny) + m4 * noise2(gen2, 8 * nx, 8 * ny)
 						+ m5 * noise2(gen2, 16 * nx, 16 * ny) + m6 * noise2(gen2, 32 * nx, 32 * ny));
@@ -184,7 +185,7 @@ public class Noise {
 			}
 		}
 		e = scaleGrid(e);
-
+		m = scaleGrid(m);
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				b[x][y] = Terrain.getBiome(e[x][y], m[x][y], sealevel);

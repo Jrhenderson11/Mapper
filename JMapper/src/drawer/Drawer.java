@@ -24,7 +24,7 @@ import version2.Terrain.Biome;
 public class Drawer extends Application {
 
 	private enum Mode {
-		OLD, TERRAIN, HEIGHTMAP
+		OLD, TERRAIN, HEIGHTMAP, MOISTURE
 	}
 
 	private Mode mode = Mode.TERRAIN;
@@ -158,10 +158,12 @@ public class Drawer extends Application {
 						drawMap(grid, canvas);
 					} else {
 						terrain = new Terrain();
-						if (mode==Mode.TERRAIN) {
+						if (mode == Mode.TERRAIN) {
 							drawTerrain(terrain, canvas);
+						} else if (mode==Mode.HEIGHTMAP) {
+							drawHeightMap(terrain.getElevation(), canvas);
 						} else {
-							drawHeightMap(terrain.getElevation(), canvas);							
+							drawHeightMap(terrain.getMoisture(), canvas);
 						}
 					}
 					theStage.show();
@@ -210,23 +212,24 @@ public class Drawer extends Application {
 					}
 					drawMap(grid, canvas);
 				}
-				
-				if (e.getCode()==KeyCode.M) {
-					if (mode == Mode.HEIGHTMAP) {
+
+				if (e.getCode() == KeyCode.M) {
+					if (mode == Mode.MOISTURE) {
 						drawMap(grid, canvas);
 						mode = Mode.OLD;
+					} else if (mode == Mode.OLD) {
+						drawTerrain(terrain, canvas);
+						mode = Mode.TERRAIN;
+					} else if (mode == Mode.TERRAIN) {
+						drawHeightMap(terrain.getElevation(), canvas);
+						mode = Mode.HEIGHTMAP;
 					} else {
-						if (mode==Mode.OLD) {
-							drawTerrain(terrain, canvas);
-							mode = Mode.TERRAIN;
-						} else {
-							drawHeightMap(terrain.getElevation(), canvas);							
-							mode = Mode.HEIGHTMAP;
-						}
+						drawHeightMap(terrain.getMoisture(), canvas);
+						mode = Mode.MOISTURE;
 					}
 				}
-
 			}
+
 		});
 
 		// drawMap(grid, canvas);
