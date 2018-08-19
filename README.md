@@ -28,4 +28,17 @@ This makes interesting and varied shapes like the ones here:
 ![alt text](https://github.com/Jrhenderson11/Mapper/blob/master/JMapper/files/island.png "Island")
 
 
+## 'ow the new stuff works
 
+I read https://www.redblobgames.com/maps/terrain-from-noise/ which was really great and so I want to try implementing some myself (this is the version2 package inside JMapper). It is a much more traditional procedural generation algorithm based on layers of noise.
+
+By layering different resolutions of random noise you can create an elevation map that looks like natural hills / mountains (to an extent). By creating another layer which determines moisture the combination of elevation and moisture can be used to determine biome: dry land could be desert while wet areas will be forests and jungles.
+
+Maybe adding a layer of temperature or weather would make the biomes have slightly more realistic placement?
+
+
+## references
+
+I'm using the java opensimplex implementation at https://gist.github.com/KdotJPG/b1270127455a94ac5d19
+
+and also the fastNoise library from https://github.com/Auburns/FastNoise_Java/blob/master/FastNoise.java for other noise
