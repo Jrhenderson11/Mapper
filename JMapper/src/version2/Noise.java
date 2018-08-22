@@ -93,10 +93,11 @@ public class Noise {
 		return gen1.eval(nx, ny) / 2 + 0.5;
 	}
 
-	private static double noise2(OpenSimplexNoise gen2, double nx, double ny) {
-		return gen2.eval(nx, ny) / 2 + 0.5;
+	private static double noise2(FastNoise gen2, double nx, double ny) {
+		return gen2.GetPerlin((float)nx,(float) ny) / 2 + 0.5;
 	}
-
+	
+	
 	public static double[][] filter(int resolution, double[][] grid) {
 
 		OpenSimplexNoise generator = new OpenSimplexNoise(new Random().nextLong());
@@ -160,14 +161,16 @@ public class Noise {
 
 		OpenSimplexNoise gen1 = new OpenSimplexNoise(random.nextLong());
 		OpenSimplexNoise gen2 = new OpenSimplexNoise(new Random().nextLong());
-
+		FastNoise gen3 = new FastNoise(random.nextInt());
+		gen3.SetFrequency(2.5f);
+		
 		double elevation, moisture;
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				double nx = x / (width / 2) - 0.5;
 				double ny = y / (height / 2) - 0.5;
-
+				
 				elevation = (e1 * noise1(gen1, 1 * nx, 1 * ny) + e2 * noise1(gen1, 2 * nx, 2 * ny)
 						+ e3 * noise1(gen1, 4 * nx, 4 * ny) + e4 * noise1(gen1, 8 * nx, 8 * ny)
 						+ e5 * noise1(gen1, 16 * nx, 16 * ny) + e6 * noise1(gen1, 32 * nx, 32 * ny));
@@ -176,9 +179,15 @@ public class Noise {
 				//nx = x / (width*3) - 0.5;
 				//ny = y / (height*3) - 0.5;
 
-				moisture = (m1 * noise2(gen2, 1 * nx, 1 * ny) + m2 * noise2(gen2, 2 * nx, 2 * ny)
-						+ m3 * noise2(gen2, 4 * nx, 4 * ny) + m4 * noise2(gen2, 8 * nx, 8 * ny)
-						+ m5 * noise2(gen2, 16 * nx, 16 * ny) + m6 * noise2(gen2, 32 * nx, 32 * ny));
+//				moisture = (m1 * noise2(gen2, 1 * nx, 1 * ny) + m2 * noise2(gen2, 2 * nx, 2 * ny)
+//						+ m3 * noise2(gen2, 4 * nx, 4 * ny) + m4 * noise2(gen2, 8 * nx, 8 * ny)
+//						+ m5 * noise2(gen2, 16 * nx, 16 * ny) + m6 * noise2(gen2, 32 * nx, 32 * ny));
+				nx = x / (width*5) - 0.5;
+				ny = y / (height*5) - 0.5;
+				moisture = (m1 * noise2(gen3, 1 * nx, 1 * ny) + m2 * noise2(gen3, 2 * nx, 2 * ny)
+				+ m3 * noise2(gen3, 4 * nx, 4 * ny) + m4 * noise2(gen3, 8 * nx, 8 * ny)
+				+ m5 * noise2(gen3, 16 * nx, 16 * ny) + m6 * noise2(gen3, 32 * nx, 32 * ny));
+
 				moisture /= (m1 + m2 + m3 + m4 + m5 + m6);
 				e[x][y] = elevation;
 				m[x][y] = moisture;

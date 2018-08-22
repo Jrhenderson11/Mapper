@@ -2,8 +2,6 @@ package drawer;
 
 import java.util.function.Function;
 
-import javafx.scene.paint.Color;
-
 public class Gradient {
 
 	private static double lerp(double x, double x0, double x1, double y0, double y1) {

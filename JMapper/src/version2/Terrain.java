@@ -122,6 +122,7 @@ public class Terrain {
 	}
 
 	public List<Point.Double> getTreePositions() {
+		System.out.println("generating trees");
 		HashMap<Biome, Integer> TREE_PROBABILITY_TABLE = new HashMap<Biome, Integer>();
 		List<Point.Double> trees = new ArrayList<>();
 		TREE_PROBABILITY_TABLE.put(Biome.SEA, 100);
@@ -170,5 +171,56 @@ public class Terrain {
 		}
 		return trees;
 	}
+
+	public List<Point.Double> getGrassPositions() {
+		System.out.println("generating grass");
+		HashMap<Biome, Integer> GRASS_PROBABILITY_TABLE = new HashMap<Biome, Integer>();
+		List<Point.Double> grass = new ArrayList<>();
+		GRASS_PROBABILITY_TABLE.put(Biome.SEA, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.SHALLOW_SEA, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.WATER, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.DESERT, 9);
+		GRASS_PROBABILITY_TABLE.put(Biome.TEMPERATE_DESERT, 9);
+		GRASS_PROBABILITY_TABLE.put(Biome.SUBTROPICAL_DESERT, 8);
+		GRASS_PROBABILITY_TABLE.put(Biome.SHRUBLAND, 4);
+		GRASS_PROBABILITY_TABLE.put(Biome.GRASSLAND, 2);
+		GRASS_PROBABILITY_TABLE.put(Biome.SAVANNAH, 3);
+		GRASS_PROBABILITY_TABLE.put(Biome.TAIGA, 3);
+		GRASS_PROBABILITY_TABLE.put(Biome.FOREST, 6);
+		GRASS_PROBABILITY_TABLE.put(Biome.TEMPERATE_DECIDUOUS_FOREST, 7);
+		GRASS_PROBABILITY_TABLE.put(Biome.TEMPERATE_RAIN_FOREST, 7);
+		GRASS_PROBABILITY_TABLE.put(Biome.TROPICAL_RAIN_FOREST, 7);
+		GRASS_PROBABILITY_TABLE.put(Biome.TROPICAL_SEASONAL_FOREST, 8);
+		GRASS_PROBABILITY_TABLE.put(Biome.BEACH, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.SCORCHED, 9);
+		GRASS_PROBABILITY_TABLE.put(Biome.BARE, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.TUNDRA, 15);
+		GRASS_PROBABILITY_TABLE.put(Biome.SNOW, 100);
+		// int R = 3;
+		// from https://www.redblobgames.com/maps/terrain-from-noise/#trees
+
+		FastNoise generator = new FastNoise(new Random().nextInt());
+		generator.SetNoiseType(NoiseType.Value);
+		for (int yc = 0; yc < size; yc++) {
+			for (int xc = 0; xc < size; xc++) {
+				double max = 0;
+				// there are more efficient algorithms than this
+				int R = GRASS_PROBABILITY_TABLE.get(biome[xc][yc]);
+				for (int yn = yc - R; yn <= yc + R; yn++) {
+					for (int xn = xc - R; xn <= xc + R; xn++) {
+						double e = generator.GetWhiteNoiseInt(xn, yn);
+						if (e > max) {
+							max = e;
+						}
+					}
+				}
+				if (generator.GetWhiteNoiseInt(xc, yc) == max) {
+					grass.add(new Point.Double(xc, yc));
+				}
+			}
+		}
+		return grass;
+	}
+	
 
 }
