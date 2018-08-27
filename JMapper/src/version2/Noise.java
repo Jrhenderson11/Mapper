@@ -162,7 +162,8 @@ public class Noise {
 		OpenSimplexNoise gen1 = new OpenSimplexNoise(random.nextLong());
 		OpenSimplexNoise gen2 = new OpenSimplexNoise(new Random().nextLong());
 		FastNoise gen3 = new FastNoise(random.nextInt());
-		gen3.SetFrequency(2.5f);
+		//2.5
+		gen3.SetFrequency(7.5f);
 		
 		double elevation, moisture;
 
@@ -176,14 +177,10 @@ public class Noise {
 						+ e5 * noise1(gen1, 16 * nx, 16 * ny) + e6 * noise1(gen1, 32 * nx, 32 * ny));
 				elevation /= (e1 + e2 + e3 + e4 + e5 + e6);
 				elevation = Math.pow(elevation, exponent);
-				//nx = x / (width*3) - 0.5;
-				//ny = y / (height*3) - 0.5;
 
-//				moisture = (m1 * noise2(gen2, 1 * nx, 1 * ny) + m2 * noise2(gen2, 2 * nx, 2 * ny)
-//						+ m3 * noise2(gen2, 4 * nx, 4 * ny) + m4 * noise2(gen2, 8 * nx, 8 * ny)
-//						+ m5 * noise2(gen2, 16 * nx, 16 * ny) + m6 * noise2(gen2, 32 * nx, 32 * ny));
 				nx = x / (width*5) - 0.5;
 				ny = y / (height*5) - 0.5;
+
 				moisture = (m1 * noise2(gen3, 1 * nx, 1 * ny) + m2 * noise2(gen3, 2 * nx, 2 * ny)
 				+ m3 * noise2(gen3, 4 * nx, 4 * ny) + m4 * noise2(gen3, 8 * nx, 8 * ny)
 				+ m5 * noise2(gen3, 16 * nx, 16 * ny) + m6 * noise2(gen3, 32 * nx, 32 * ny));
@@ -198,13 +195,16 @@ public class Noise {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				b[x][y] = Terrain.getBiome(e[x][y], m[x][y], sealevel);
+				if (b[x][y]==Biome.SEA || b[x][y]==Biome.SHALLOW_SEA || b[x][y]==Biome.WATER) {
+					m[x][y]=1;
+				}
 			}
 		}
 
 		triple.setElevation(e);
 		triple.setMoisture(m);
 		triple.setBiome(b);
-
+		
 		return triple;
 	}
 
