@@ -180,9 +180,9 @@ public class Terrain {
 		System.out.println("[*] generating trees");
 		HashMap<Biome, Integer> TREE_PROBABILITY_TABLE = new HashMap<Biome, Integer>();
 		List<Point.Double> trees = new ArrayList<>();
-		TREE_PROBABILITY_TABLE.put(Biome.SEA, 100);
-		TREE_PROBABILITY_TABLE.put(Biome.SHALLOW_SEA, 100);
-		TREE_PROBABILITY_TABLE.put(Biome.WATER, 100);
+		TREE_PROBABILITY_TABLE.put(Biome.SEA, -1);
+		TREE_PROBABILITY_TABLE.put(Biome.SHALLOW_SEA, -1);
+		TREE_PROBABILITY_TABLE.put(Biome.WATER, -1);
 		TREE_PROBABILITY_TABLE.put(Biome.DESERT, 9);
 		TREE_PROBABILITY_TABLE.put(Biome.TEMPERATE_DESERT, 9);
 		TREE_PROBABILITY_TABLE.put(Biome.SUBTROPICAL_DESERT, 8);
@@ -195,11 +195,11 @@ public class Terrain {
 		TREE_PROBABILITY_TABLE.put(Biome.TEMPERATE_RAIN_FOREST, 1);
 		TREE_PROBABILITY_TABLE.put(Biome.TROPICAL_RAIN_FOREST, 1);
 		TREE_PROBABILITY_TABLE.put(Biome.TROPICAL_SEASONAL_FOREST, 1);
-		TREE_PROBABILITY_TABLE.put(Biome.BEACH, 100);
+		TREE_PROBABILITY_TABLE.put(Biome.BEACH, -1);
 		TREE_PROBABILITY_TABLE.put(Biome.MARSH, 9);
-		TREE_PROBABILITY_TABLE.put(Biome.BARE, 100);
+		TREE_PROBABILITY_TABLE.put(Biome.BARE, -1);
 		TREE_PROBABILITY_TABLE.put(Biome.TUNDRA, 15);
-		TREE_PROBABILITY_TABLE.put(Biome.SNOW, 100);
+		TREE_PROBABILITY_TABLE.put(Biome.SNOW, -1);
 		// int R = 3;
 		// from https://www.redblobgames.com/maps/terrain-from-noise/#trees
 
@@ -210,17 +210,19 @@ public class Terrain {
 				double max = 0;
 				// there are more efficient algorithms than this
 				int R = TREE_PROBABILITY_TABLE.get(biome[xc][yc]);
-				for (int yn = yc - R; yn <= yc + R; yn++) {
-					for (int xn = xc - R; xn <= xc + R; xn++) {
-						double e = generator.GetWhiteNoiseInt(xn, yn);
-						if (e > max) {
-							max = e;
+				if (R != -1) {
+					for (int yn = yc - R; yn <= yc + R; yn++) {
+						for (int xn = xc - R; xn <= xc + R; xn++) {
+							double e = generator.GetWhiteNoiseInt(xn, yn);
+							if (e > max) {
+								max = e;
+							}
 						}
 					}
-				}
-				if (generator.GetWhiteNoiseInt(xc, yc) == max) {
-					// place tree at xc,yc
-					trees.add(new Point.Double(xc, yc));
+					if (generator.GetWhiteNoiseInt(xc, yc) == max) {
+						// place tree at xc,yc
+						trees.add(new Point.Double(xc, yc));
+					}
 				}
 			}
 		}
@@ -231,8 +233,8 @@ public class Terrain {
 		System.out.println("[*] generating grass");
 		HashMap<Biome, Integer> GRASS_PROBABILITY_TABLE = new HashMap<Biome, Integer>();
 		List<Point.Double> grass = new ArrayList<>();
-		GRASS_PROBABILITY_TABLE.put(Biome.SEA, 100);
-		GRASS_PROBABILITY_TABLE.put(Biome.SHALLOW_SEA, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.SEA, -1);
+		GRASS_PROBABILITY_TABLE.put(Biome.SHALLOW_SEA, -1);
 		GRASS_PROBABILITY_TABLE.put(Biome.WATER, 100);
 		GRASS_PROBABILITY_TABLE.put(Biome.DESERT, 9);
 		GRASS_PROBABILITY_TABLE.put(Biome.TEMPERATE_DESERT, 9);
@@ -246,9 +248,9 @@ public class Terrain {
 		GRASS_PROBABILITY_TABLE.put(Biome.TEMPERATE_RAIN_FOREST, 7);
 		GRASS_PROBABILITY_TABLE.put(Biome.TROPICAL_RAIN_FOREST, 7);
 		GRASS_PROBABILITY_TABLE.put(Biome.TROPICAL_SEASONAL_FOREST, 8);
-		GRASS_PROBABILITY_TABLE.put(Biome.BEACH, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.BEACH, -1);
 		GRASS_PROBABILITY_TABLE.put(Biome.MARSH, 1);
-		GRASS_PROBABILITY_TABLE.put(Biome.BARE, 100);
+		GRASS_PROBABILITY_TABLE.put(Biome.BARE, -1);
 		GRASS_PROBABILITY_TABLE.put(Biome.TUNDRA, 1);
 		GRASS_PROBABILITY_TABLE.put(Biome.SNOW, 2);
 		// int R = 3;
@@ -261,16 +263,18 @@ public class Terrain {
 				double max = 0;
 				// there are more efficient algorithms than this
 				int R = GRASS_PROBABILITY_TABLE.get(biome[xc][yc]);
-				for (int yn = yc - R; yn <= yc + R; yn++) {
-					for (int xn = xc - R; xn <= xc + R; xn++) {
-						double e = generator.GetWhiteNoiseInt(xn, yn);
-						if (e > max) {
-							max = e;
+				if (R != -1) {
+					for (int yn = yc - R; yn <= yc + R; yn++) {
+						for (int xn = xc - R; xn <= xc + R; xn++) {
+							double e = generator.GetWhiteNoiseInt(xn, yn);
+							if (e > max) {
+								max = e;
+							}
 						}
 					}
-				}
-				if (generator.GetWhiteNoiseInt(xc, yc) == max) {
-					grass.add(new Point.Double(xc, yc));
+					if (generator.GetWhiteNoiseInt(xc, yc) == max) {
+						grass.add(new Point.Double(xc, yc));
+					}
 				}
 			}
 		}
@@ -281,9 +285,9 @@ public class Terrain {
 		System.out.println("[*] generating bushes");
 		HashMap<Biome, Integer> BUSH_PROBABILITY_TABLE = new HashMap<Biome, Integer>();
 		List<Point.Double> bushes = new ArrayList<>();
-		BUSH_PROBABILITY_TABLE.put(Biome.SEA, 100);
-		BUSH_PROBABILITY_TABLE.put(Biome.SHALLOW_SEA, 100);
-		BUSH_PROBABILITY_TABLE.put(Biome.WATER, 100);
+		BUSH_PROBABILITY_TABLE.put(Biome.SEA, -1);
+		BUSH_PROBABILITY_TABLE.put(Biome.SHALLOW_SEA, -1);
+		BUSH_PROBABILITY_TABLE.put(Biome.WATER, -1);
 		BUSH_PROBABILITY_TABLE.put(Biome.DESERT, 9);
 		BUSH_PROBABILITY_TABLE.put(Biome.TEMPERATE_DESERT, 6);
 		BUSH_PROBABILITY_TABLE.put(Biome.SUBTROPICAL_DESERT, 6);
@@ -296,11 +300,11 @@ public class Terrain {
 		BUSH_PROBABILITY_TABLE.put(Biome.TEMPERATE_RAIN_FOREST, 10);
 		BUSH_PROBABILITY_TABLE.put(Biome.TROPICAL_RAIN_FOREST, 10);
 		BUSH_PROBABILITY_TABLE.put(Biome.TROPICAL_SEASONAL_FOREST, 10);
-		BUSH_PROBABILITY_TABLE.put(Biome.BEACH, 100);
+		BUSH_PROBABILITY_TABLE.put(Biome.BEACH, -1);
 		BUSH_PROBABILITY_TABLE.put(Biome.MARSH, 9);
-		BUSH_PROBABILITY_TABLE.put(Biome.BARE, 100);
+		BUSH_PROBABILITY_TABLE.put(Biome.BARE, -1);
 		BUSH_PROBABILITY_TABLE.put(Biome.TUNDRA, 6);
-		BUSH_PROBABILITY_TABLE.put(Biome.SNOW, 100);
+		BUSH_PROBABILITY_TABLE.put(Biome.SNOW, -1);
 		// int R = 3;
 		// from https://www.redblobgames.com/maps/terrain-from-noise/#trees
 
@@ -311,16 +315,18 @@ public class Terrain {
 				double max = 0;
 				// there are more efficient algorithms than this
 				int R = BUSH_PROBABILITY_TABLE.get(biome[xc][yc]);
-				for (int yn = yc - R; yn <= yc + R; yn++) {
-					for (int xn = xc - R; xn <= xc + R; xn++) {
-						double e = generator.GetWhiteNoiseInt(xn, yn);
-						if (e > max) {
-							max = e;
+				if (R != -1) {
+					for (int yn = yc - R; yn <= yc + R; yn++) {
+						for (int xn = xc - R; xn <= xc + R; xn++) {
+							double e = generator.GetWhiteNoiseInt(xn, yn);
+							if (e > max) {
+								max = e;
+							}
 						}
 					}
-				}
-				if (generator.GetWhiteNoiseInt(xc, yc) == max) {
-					bushes.add(new Point.Double(xc, yc));
+					if (generator.GetWhiteNoiseInt(xc, yc) == max) {
+						bushes.add(new Point.Double(xc, yc));
+					}
 				}
 			}
 		}
