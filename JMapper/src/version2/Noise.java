@@ -49,27 +49,33 @@ public class Noise {
 				}
 			}
 		}
-		System.out.println("max: " + max);
-		System.out.println("min: " + min);
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				grid[x][y] = (((double) oldgrid[x][y]) - min) / (max - min);
 
 			}
 		}
-		// max = Integer.MIN_VALUE;
-		// min = Integer.MAX_VALUE;
-		// for (int x = 0; x < width; x++) {
-		// for (int y = 0; y < height; y++) {
-		// if (grid[x][y] < min) {
-		// min = grid[x][y];
-		// } else if (grid[x][y] > max) {
-		// max = grid[x][y];
-		// }
-		// }
-		// }
-		// System.out.println("newmax: " + max);
-		// System.out.println("newmin: " + min);
+		return grid;
+	}
+
+	public static double[][] scaleAndInvertIntGrid(int[][] oldgrid) {
+		int width = oldgrid[0].length, height = oldgrid.length;
+		double[][] grid = new double[width][height];
+		double max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				if (oldgrid[x][y] < min) {
+					min = oldgrid[x][y];
+				} else if (oldgrid[x][y] > max) {
+					max = oldgrid[x][y];
+				}
+			}
+		}
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				grid[x][y] = 1 - (((double) oldgrid[x][y]) - min) / (max - min);
+			}
+		}
 		return grid;
 	}
 
@@ -94,10 +100,9 @@ public class Noise {
 	}
 
 	private static double noise2(FastNoise gen2, double nx, double ny) {
-		return gen2.GetPerlin((float)nx,(float) ny) / 2 + 0.5;
+		return gen2.GetPerlin((float) nx, (float) ny) / 2 + 0.5;
 	}
-	
-	
+
 	public static double[][] filter(int resolution, double[][] grid) {
 
 		OpenSimplexNoise generator = new OpenSimplexNoise(new Random().nextLong());
@@ -123,7 +128,7 @@ public class Noise {
 		Random random = new Random();
 
 		OpenSimplexNoise gen1 = new OpenSimplexNoise(random.nextLong());
-	
+
 		double elevation;
 
 		for (int y = 0; y < height; y++) {
@@ -162,28 +167,28 @@ public class Noise {
 		OpenSimplexNoise gen1 = new OpenSimplexNoise(random.nextLong());
 		OpenSimplexNoise gen2 = new OpenSimplexNoise(new Random().nextLong());
 		FastNoise gen3 = new FastNoise(random.nextInt());
-		//2.5
+		// 2.5
 		gen3.SetFrequency(7.5f);
-		
+
 		double elevation, moisture;
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				double nx = x / (width / 2) - 0.5;
 				double ny = y / (height / 2) - 0.5;
-				
+
 				elevation = (e1 * noise1(gen1, 1 * nx, 1 * ny) + e2 * noise1(gen1, 2 * nx, 2 * ny)
 						+ e3 * noise1(gen1, 4 * nx, 4 * ny) + e4 * noise1(gen1, 8 * nx, 8 * ny)
 						+ e5 * noise1(gen1, 16 * nx, 16 * ny) + e6 * noise1(gen1, 32 * nx, 32 * ny));
 				elevation /= (e1 + e2 + e3 + e4 + e5 + e6);
 				elevation = Math.pow(elevation, exponent);
 
-				nx = x / (width*5) - 0.5;
-				ny = y / (height*5) - 0.5;
+				nx = x / (width * 5) - 0.5;
+				ny = y / (height * 5) - 0.5;
 
 				moisture = (m1 * noise2(gen3, 1 * nx, 1 * ny) + m2 * noise2(gen3, 2 * nx, 2 * ny)
-				+ m3 * noise2(gen3, 4 * nx, 4 * ny) + m4 * noise2(gen3, 8 * nx, 8 * ny)
-				+ m5 * noise2(gen3, 16 * nx, 16 * ny) + m6 * noise2(gen3, 32 * nx, 32 * ny));
+						+ m3 * noise2(gen3, 4 * nx, 4 * ny) + m4 * noise2(gen3, 8 * nx, 8 * ny)
+						+ m5 * noise2(gen3, 16 * nx, 16 * ny) + m6 * noise2(gen3, 32 * nx, 32 * ny));
 
 				moisture /= (m1 + m2 + m3 + m4 + m5 + m6);
 				e[x][y] = elevation;
@@ -195,8 +200,8 @@ public class Noise {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				b[x][y] = Terrain.getBiome(e[x][y], m[x][y], sealevel);
-				if (b[x][y]==Biome.SEA || b[x][y]==Biome.SHALLOW_SEA || b[x][y]==Biome.WATER) {
-					m[x][y]=1;
+				if (b[x][y] == Biome.SEA || b[x][y] == Biome.SHALLOW_SEA || b[x][y] == Biome.WATER) {
+					m[x][y] = 1;
 				}
 			}
 		}
@@ -204,7 +209,7 @@ public class Noise {
 		triple.setElevation(e);
 		triple.setMoisture(m);
 		triple.setBiome(b);
-		
+
 		return triple;
 	}
 

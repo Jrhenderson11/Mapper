@@ -18,6 +18,7 @@ public class Terrain {
 
 	private double[][] elevation, moisture;
 	private Biome[][] biome;
+	private int[][] waterDistMap;
 	private double sealevel;
 
 	public Terrain() {
@@ -331,6 +332,58 @@ public class Terrain {
 			}
 		}
 		return bushes;
+	}
+
+	public int[][] generateWaterDistMap() {
+		System.out.println("getting water map");
+		int iterations = 0;
+		int[][] distances = new int[size][size];
+
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
+				distances[x][y] = Integer.MAX_VALUE;
+			}
+		}
+		boolean changed = true;
+		while (changed) {
+			//System.out.println(iterations++);
+			changed = false;
+			for (int x = 0; x < size; x++) {
+				for (int y = 0; y < size; y++) {
+					if ((biome[x][y] == Biome.WATER || biome[x][y] == Biome.SHALLOW_SEA || biome[x][y] == Biome.MARSH) && distances[x][y]!=0) {
+						distances[x][y] = 0;
+						changed = true;
+					} else {
+						List<Integer> dists = new ArrayList<Integer>(4);
+						int min = Integer.MAX_VALUE-1;
+						for (int dx = -1; dx < 2; dx++) {
+							for (int dy = -1; dy < 2; dy++) {
+								if (!(dy == 0 && dx == 0) && size > x + dx && x + dx > 0 && size > y + dy && y + dy > 0
+										&& distances[x + dx][y + dy] < min) {
+									// dists.add(distances[dx][dy]);
+									min = distances[x + dx][y + dy];
+								}
+							}
+						}
+						if ((min + 1) < distances[x][y]) {
+							//System.out.println("Min+1: " + (min+1) + ", old: " + distances[x][y]);
+							distances[x][y] = min + 1;
+							changed = true;
+						}
+					}
+				}
+			}
+		}
+		System.out.println("done water map");
+		return distances;
+	}
+
+	public int[][] getWaterDistMap() {
+		return waterDistMap;
+	}
+
+	public void setWaterDistMap(int[][] waterDistMap) {
+		this.waterDistMap = waterDistMap;
 	}
 
 }
